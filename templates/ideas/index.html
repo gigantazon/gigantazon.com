@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+ <head>
+  <title>Gigantazon - What's the big idea?</title>
+  <link rel="stylesheet" href="{% static "css/gumby.css" %}" />
+  <script src="{% static "js/main.js" %}"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery/min.js" type="text/javascript"></script>
+  <script src="{% static "js/npajax.js" %}" type="text/javascript"></script>
+ </head>
+<body>
+ <div class="navbar" id="nav1">
+     <center><img src="{% static "img/gigantazon_monstar-font1.png" %}"></center>
+ </div>
+ <div class="row">
+  <div class="centered seven columns">
+  <form id="login" method="post" action="#">
+   <ul>
+    <li><input class="input" type="text" placeholder="Username" name="username">
+    <input class="input" type="password" placeholder="Password" name="password">
+    <div class="small secondary btn"><input type="submit" name="submit" value="Login"></div>
+    <a href="#"><span style="font-size: 10px;">Or Sign-up</span></a>
+    </li>
+   </ul>  
+  </div>
+ </div>
+ <div class="row" style="margin-top: 20px">
+  <div class="push_two eight columns">
+   <p>What's the anatomy of an idea? What are the elements that take a raw idea to an actionable plan? How can the skills, experience, and education of others develop ideas?</p>
+   <p>This site, gigantazon.com, is the world's first crowdsourcing idea tool that lives at the crossroads where inspiration, ideas, and action meet the crowd.  Think of it as a layman's thinktank, a place where you can refine ideas to make them userful.</p>
+   <p>Drop your email address to stay in the know of developments on the site, and get ready for the beta!</p>
+  </div>
+ </div>
+</body>
+</html>
