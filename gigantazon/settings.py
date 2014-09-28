@@ -48,6 +48,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles', 
+    'south',
     'ideas',
 )
 
@@ -73,7 +74,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'gigantazon',
 	'USER': 'gigantic',
-	'PASSWORD': 'g1gant1c',
+	'PASSWORD': 'g1gant1c', ## Gig@ntaZ0n
 	'HOST': '127.0.0.1',
 	'PORT': '5432',
     }
