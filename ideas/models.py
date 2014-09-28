@@ -14,14 +14,17 @@ class UserProfile(models.Model):
 
 class Ideas(models.Model):
 	title = models.CharField(max_length=128)
-	user = models.ForeignKey(UserProfile)
+	user = models.ForeignKey(User)
+	date = models.DateTimeField(auto_now=True)
 
 class Sparks(models.Model):
 	idea = models.ForeignKey(Ideas)
 	spark = models.CharField(max_length=300)
 	url = models.URLField(blank=True)
+	date = models.DateTimeField(auto_now=True)
 
 class Actions(models.Model):
 	idea = models.ForeignKey(Ideas)
 	action = models.CharField(max_length=300)
 	url = models.URLField(blank=True)
+	date = models.DateTimeField(auto_now=True)

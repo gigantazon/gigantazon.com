@@ -2,6 +2,25 @@ from django.conf.urls import patterns, url
 from ideas import views
 
 urlpatterns = patterns('',
-        url(r'^$', views.index, name='index'),
-
+        url(r'^$', views.ideas, name='ideas'),
+        url(r'^register/$', views.register, name='register'),
+        url(r'^login/$', views.user_login, name='user_login'),
+        url(r'^logout/$', views.user_logout, name='user_logout'),
+        url(r'^password/reset/$', 
+         'django.contrib.auth.views.password_reset', 
+         {'post_reset_redirect' : '/ideas/password/reset/done/', 
+         'template_name': 'ideas/pwreset_form.html',
+         'email_template_name': 'ideas/pwreset_email.html'},
+         name="password_reset"),
+        url(r'^password/reset/done/$',
+         'django.contrib.auth.views.password_reset_done',
+         {'template_name': 'ideas/pwreset_done.html'}),
+        url(r'^password/reset/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', 
+         'django.contrib.auth.views.password_reset_confirm', 
+         {'post_reset_redirect' : '/ideas/password/done/',
+          'template_name': 'ideas/pwreset_confirm.html'}),
+        url(r'^password/done/$', 
+         'django.contrib.auth.views.password_reset_complete',
+          {'template_name': 'ideas/pwreset_complete.html',
+           'current_app': 'ideas'}),
 )

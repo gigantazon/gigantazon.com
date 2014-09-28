@@ -1,0 +1,11 @@
+{% extends "ideas/base.html" %}
+
+
+{% block main %}
+
+{% for idea in idea_list %}
+	<h2>{{ idea.title }}</h2>
+{% endfor %}
+	
+
+{% endblock %}

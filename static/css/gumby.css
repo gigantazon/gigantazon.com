@@ -1681,3 +1681,78 @@ table.rounded thead th, table.rounded thead td, table.rounded caption + tbody tr
 .ie8 .ttip:hover:before, .ie8 .ttip:hover:after { display: block; }
 
 .ie9 .radio.checked i, .ie9 .checkbox.checked i { top: 0; }
+
+
+
+ul#inner-footer li.inner-footer_icon.facebooklike {
+	width:85px;
+	margin:0;
+	float:right;
+	position:relative;
+	top:4px;
+}
+
+ul#inner-footer li.inner-footer_icon.facebook a {
+ 	background:url('static/img/facebook.png') no-repeat top left;
+}
+
+ul#inner-footer li.inner-footer_icon.twitter a {
+ 	background:url('static/img/twitter.png') no-repeat top left;
+}
+
+ul#inner-footer li.inner-footer_icon.googleplus a {
+ 	background:url('static/img/googleplus.png') no-repeat top left;
+}
+
+ul#inner-footer li.inner-footer_icon.linkedin a {
+ 	background:url('static/img/linkedin.png') no-repeat top left;
+}
+
+ul#inner-footer li.inner-footer_icon a:hover {
+	background-position:bottom left;
+}
+
+ul#inner-footer li a {
+	text-decoration:none;
+}
+
+ul#inner-footer {
+	margin:22px 0 0 0;
+}
+
+ul#inner-footer li {
+	float:right;
+	margin:0 0 0 10px;
+	padding-top:5px;
+}
+
+ul#inner-footer li p {
+	margin:0;
+	font-size:1.4em !important;
+	font-family:"Helvetica Neue", Arial, Helvetica, sans-serif !important;
+	font-weight:300;
+	color:#333333;
+	line-height:1.4em;
+}
+
+ul#inner-footer li p a {
+	text-decoration:none;
+	color:#00bfbf !important;
+}
+
+ul#inner-footer li p a:hover {
+	text-decoration:underline;
+}
+
+ul#inner-footer li.inner-footer_icon {
+	float:left;
+	margin:0 7px 0 0;
+	padding:0;
+}
+
+ul#inner-footer li.inner-footer_icon a {
+	display:block;
+ 	width:24px;
+ 	height:24px;
+ 	text-indent:-9999px;
+}
