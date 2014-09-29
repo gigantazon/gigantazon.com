@@ -9,20 +9,23 @@
   <script src="{% static "js/npajax.js" %}" type="text/javascript"></script>
  </head>
 <body>
+
 <div class="navbar" id="nav1">
 	<div class="row">
-		<div class="twelve columns">
-			<img src="{% static "img/gigantazon_font_small_variant.png" %}">
+		<div class="eight columns">
+			<a href="/ideas/"><img src="{% static "img/gigantazon_font_small_variant.png" %}"></a>
+		</div>
+		<div class="four columns">
+			{% if user.is_authenticated %}<h6>Welcome: {{ user.username }}</h6>{% endif %}
 		</div>
 	</div>
 </div>
-<div class="row">
-	<div class="twelve columns">
+
+
 {% block main %}
 
 {% endblock %}
-	</div>
-</div>
+
 
 </body>
 </html>

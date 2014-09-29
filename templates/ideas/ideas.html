@@ -2,10 +2,22 @@
 
 
 {% block main %}
-
+<div class="row">
+ <div class="five columns">
+ 	<h3>Big Ideas</h3>
 {% for idea in idea_list %}
-	<h2>{{ idea.title }}</h2>
+	<a href="view/{{ idea.id }}">{{ idea.title }}</a></p>
 {% endfor %}
 	
+{% if idea_list.has_next %}
+	<a href="?page={{ idea_list.next_page_number }}">next</a>
+{% endif %}
 
+ </div>
+ <div class="push_one five columns">
+   <h3>Latest Sparks</h3>
+  {% for spark in sparks %}
+    <a href="view/{{ spark.idea_id }}">{{ spark.spark }}</a></p>
+  {% endfor %}
+</div>
 {% endblock %}

@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from ideas.models import Ideas, Sparks, Actions
+from ideas.models import Ideas, Sparks, Actions, UserProfile
 from django.core.paginator import Paginator,EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 
@@ -16,8 +16,9 @@ def index(request):
 
 def ideas(request):
 	context = RequestContext(request)
-	idea_list = Ideas.objects.order_by('-date').select_related()
-	paginator = Paginator(idea_list, 10)
+	idea_list = Ideas.objects.filter(is_parent=True).order_by('-date')
+	spark_list = Sparks.objects.order_by('-date')
+	paginator = Paginator(idea_list, 20)
 	page = request.GET.get('page')
 	try:
 		paginator = paginator.page(page)
@@ -26,8 +27,18 @@ def ideas(request):
 	except EmptyPage:
 		paginator = paginator.page(paginator.num_pages)
 
-	context_dict = {'idea_list': paginator}
+	context_dict = {'idea_list': paginator, 'sparks': spark_list}
 	return render_to_response('ideas/ideas.html', context_dict, context)
+
+def view_idea(request, idea_id):
+	context = RequestContext(request)
+	idea_data = Ideas.objects.get(pk=idea_id)
+	idea_subs = Ideas.objects.filter(parent_id=idea_id)
+	idea_sparks = Sparks.objects.filter(idea_id=idea_id)
+	idea_actions = Actions.objects.filter(idea_id=idea_id)
+	context_dict = {'ideas': idea_data, 'subs': idea_subs, 'sparks': idea_sparks,'actions': idea_actions}
+	return render_to_response('ideas/view.html', context_dict, context)
+
 
 def register(request):
 	context = RequestContext(request)

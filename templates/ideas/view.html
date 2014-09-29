@@ -1,0 +1,38 @@
+{% extends "ideas/base.html" %}
+
+
+{% block main %}
+<div class="row">
+ <div class="eight columns">
+{% if ideas.is_parent = False %}
+  <a href="/ideas/view/{{ ideas.parent_id_id }}">Back to parent</a>
+{% endif %}
+<h2>Idea: {{ ideas.title }}</h2>
+<br>
+<h4>Ideas:</h4>
+{% for sub in subs %}
+  <a href="/ideas/view/{{ sub.id }}">{{ sub.title }}</a><br />
+ {% endfor %}
+<br>
+
+<h4>Sparks:</h4>
+{% for spark in sparks %}
+  {% if spark.url %}
+    <a href="{{ spark.url }}" target="_new">{{ spark.spark }}</a><br />
+  {% else %}
+    {{ spark.spark }}<br />
+  {% endif %}
+{% endfor %}
+
+<h4>Actions:</h4>
+{% for action in actions %}
+  {% if action.url %}
+    <a href="{{ action.url }}" target="_new">{{ action.action }}</a><br />
+  {% else %}
+    {{ action.action }}<br />
+  {% endif %}
+{% endfor %}
+
+ </div>
+</div>
+{% endblock %}

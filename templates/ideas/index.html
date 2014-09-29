@@ -13,9 +13,9 @@
      <center><img src="{% static "img/gigantazon_monstar-font1.png" %}"></center>
  </div>
  <div class="row">
-  <div class="centered seven columns">
+  <div class="push_two eight columns">
   {% if user.is_authenticated %}
-    <ul><li><h6>Welcome back: {{ user.username }} </h6></li></ul>
+    <a href="/ideas/">Go to the Beta, </a>{{ user.username }}.  Or <a href="/ideas/logout/">Logout</a>
   {% else %}  
   <form id="login" method="post" action="/ideas/login/">
     {% csrf_token %}
@@ -23,7 +23,7 @@
     <li><input class="input" type="text" placeholder="Username" name="username">
     <input class="input" type="password" placeholder="Password" name="password">
     <div class="small secondary btn"><input type="submit" name="submit" value="Login"></div>
-    <a href="/ideas/pwreset/"><span style="font-size: 10px;">Forgot password?</span></a>
+    <a href="/ideas/password/reset/"><span style="font-size: 10px;">Forgot password?</span></a>
     </li>
    </ul>  
  </form>
@@ -34,11 +34,16 @@
   <div class="push_two eight columns">
    <p>What's the anatomy of an idea? What are the elements that take a raw idea to an actionable plan? How can the skills, experience, and education of others develop ideas?</p>
    <p>This site, gigantazon.com, is the world's first crowdsourcing idea tool that lives at the crossroads where inspiration, ideas, and action meet the crowd.  Think of it as a layman's thinktank, a place where you can refine ideas to make them userful.</p>
-   <p>Drop your email address to stay in the know of developments on the site, and get ready for the beta!</p>
+   <p>Drop your email address to stay in the know of developments on the site, and get ready for the <a href="/ideas/">beta!</a></p>
+  </div>
+ </div>
+ <div class="row" style="margin-top: 50px">
+  <div class="push_three six columns">
+    <iframe width="560" height="315" src="//www.youtube.com/embed/1LN5crzo0aw" frameborder="0" allowfullscreen></iframe>
   </div>
  </div>
  <div class="row" style="margin-top: 20px">
-  <div class="push_two four columns">
+  <div class="push_two five columns">
    <div class="row">
     <div class="one column image"><a href="http://www.facebook.com/gigantazoncom" target="_blank"><i class="icon-facebook-squared"></i></a></div>
     <div class="one column image"><a href="http://www.twitter.com/gigantazon" target="_blank"><i class="icon-twitter"></i></a></div>
