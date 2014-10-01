@@ -18,7 +18,7 @@ class Ideas(models.Model):
 	user = models.ForeignKey(User)
 	date = models.DateTimeField(auto_now=True)
 	is_parent = models.BooleanField(default=True)
-	parent_id = models.ForeignKey('self', blank=False)
+	parent_id = models.ForeignKey('self', null=True)
 
 class Sparks(models.Model):
 	idea = models.ForeignKey(Ideas)

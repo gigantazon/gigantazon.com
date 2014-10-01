@@ -536,7 +536,7 @@ html, body { height: 100%; }
 
 .icon-vimeo-circled.icon-left a:before, .icon-vimeo-circled.icon-right a:after, i.icon-vimeo-circled:before { content: "\f307"; height: inherit; }
 
-.icon-twitter.icon-left a:before, .icon-twitter.icon-right a:after, i.icon-twitter:before { content: "\f309"; height: inherit; }
+.icon-twitter.icon-left a:before, .icon-twitter.icon-right a:after, i.icon-twitter:before { content: "\f309"; height: inherit; font-size: 1.5em;}
 
 .icon-twitter-circled.icon-left a:before, .icon-twitter-circled.icon-right a:after, i.icon-twitter-circled:before { content: "\f30a"; height: inherit; }
 
@@ -544,9 +544,9 @@ html, body { height: 100%; }
 
 .icon-facebook-circled.icon-left a:before, .icon-facebook-circled.icon-right a:after, i.icon-facebook-circled:before { content: "\f30d"; height: inherit; }
 
-.icon-facebook-squared.icon-left a:before, .icon-facebook-squared.icon-right a:after, i.icon-facebook-squared:before { content: "\f30e"; height: inherit; }
+.icon-facebook-squared.icon-left a:before, .icon-facebook-squared.icon-right a:after, i.icon-facebook-squared:before { content: "\f30e"; height: inherit; font-size: 1.5em;}
 
-.icon-gplus.icon-left a:before, .icon-gplus.icon-right a:after, i.icon-gplus:before { content: "\f30f"; height: inherit; }
+.icon-gplus.icon-left a:before, .icon-gplus.icon-right a:after, i.icon-gplus:before { content: "\f30f"; height: inherit; font-size: 1.5em;}
 
 .icon-gplus-circled.icon-left a:before, .icon-gplus-circled.icon-right a:after, i.icon-gplus-circled:before { content: "\f310"; height: inherit; }
 
@@ -560,7 +560,7 @@ html, body { height: 100%; }
 
 .icon-linkedin.icon-left a:before, .icon-linkedin.icon-right a:after, i.icon-linkedin:before { content: "\f318"; height: inherit; }
 
-.icon-linkedin-circled.icon-left a:before, .icon-linkedin-circled.icon-right a:after, i.icon-linkedin-circled:before { content: "\f319"; height: inherit; }
+.icon-linkedin-circled.icon-left a:before, .icon-linkedin-circled.icon-right a:after, i.icon-linkedin-circled:before { content: "\f319"; height: inherit; font-size: 1.5em; }
 
 .icon-dribbble.icon-left a:before, .icon-dribbble.icon-right a:after, i.icon-dribbble:before { content: "\f31b"; height: inherit; }
 
@@ -1638,7 +1638,7 @@ body .video.twitch, body .video.youtube.show_controls { padding-top: 30px; }
 .video > video, .video > iframe, .video > object, .video > embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 
 /* Toggles */
-.drawer { position: relative; width: 100%; max-height: 0; background: #3e4144; -webkit-box-shadow: inset 0 -2px 5px #313436, inset 0 2px 5px #313436; -moz-box-shadow: inset 0 -2px 5px #313436, inset 0 2px 5px #313436; box-shadow: inset 0 -2px 5px #313436, inset 0 2px 5px #313436; overflow: hidden; -webkit-transition-duration: 0.3s; -moz-transition-duration: 0.3s; -o-transition-duration: 0.3s; transition-duration: 0.3s; }
+.drawer { position: relative; width: 100%; max-height: 0; background: #fff /* #3e4144 */; -webkit-box-shadow: inset 0 -0px 0px #eeeeee, inset 0 0px 0px #eeeeee /* 313436 */; -moz-box-shadow: inset 0 -0px 0px #eeeeee, inset 0 0px 0px #eeeeee; box-shadow: inset 0 -0px 0px #eeeeee, inset 0 0px 0px #313436; overflow: hidden; -webkit-transition-duration: 0.3s; -moz-transition-duration: 0.3s; -o-transition-duration: 0.3s; transition-duration: 0.3s; }
 .drawer.active { height: auto; max-height: 800px; -webkit-transition-duration: 0.5s; -moz-transition-duration: 0.5s; -o-transition-duration: 0.5s; transition-duration: 0.5s; }
 
 .modal { width: 100%; height: 100%; position: fixed; top: 0; left: 0; z-index: 999999; background: black; background: rgba(0, 0, 0, 0.8); }
@@ -1755,4 +1755,10 @@ ul#inner-footer li.inner-footer_icon a {
  	width:24px;
  	height:24px;
  	text-indent:-9999px;
+}
+
+#splashscreen {
+	height: 100%;
+	width: 100%;
+	z-index: 99;
 }

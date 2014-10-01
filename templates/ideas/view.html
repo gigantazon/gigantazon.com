@@ -2,29 +2,63 @@
 
 
 {% block main %}
+{% if ideas.is_parent = False %}
 <div class="row">
  <div class="eight columns">
-{% if ideas.is_parent = False %}
   <a href="/ideas/view/{{ ideas.parent_id_id }}">Back to parent</a>
+ </div>
+</div>
 {% endif %}
+
+<div class="row">
+ <div class="eight columns">
 <h2>Idea: {{ ideas.title }}</h2>
-<br>
-<h4>Ideas:</h4>
-{% for sub in subs %}
-  <a href="/ideas/view/{{ sub.id }}">{{ sub.title }}</a><br />
- {% endfor %}
-<br>
+ </div>
+</div>
 
-<h4>Sparks:</h4>
-{% for spark in sparks %}
-  {% if spark.url %}
-    <a href="{{ spark.url }}" target="_new">{{ spark.spark }}</a><br />
-  {% else %}
-    {{ spark.spark }}<br />
-  {% endif %}
-{% endfor %}
+<div class="row">
+ <div class="twelve columns">
+  <p class="btn medium primary"><a href="#" class="switch" gumby-trigger="#drawer1">
+   Ideas</a></p>
+  <p class="btn medium primary"><a href="#" class="switch" gumby-trigger="#drawer2">
+   Sparks</a></p>
+  <p class="btn medium primary"><a href="#" class="switch" gumby-trigger="#drawer3">
+   Actions</a><p>
+ </div>
+</div>
 
-<h4>Actions:</h4>
+<div class="row">
+ <div class="eight columns">
+  <div class="drawer active" id="drawer1" style="background: #fff">
+   <h4>Ideas</h4>
+   {% for sub in subs %}
+    <a href="/ideas/view/{{ sub.id }}">{{ sub.title }}</a><br />
+   {% endfor %}
+  </div>
+ </div>
+ <div class="four columns">
+ </div>
+</div>
+
+<div class="row">
+ <div class="eight columns">
+  <div class="drawer" id="drawer2" style="margin-top: 20px">
+   <h4>Sparks</h4>
+   {% for spark in sparks %}
+    {% if spark.url %}
+     <a href="{{ spark.url }}" target="_new">{{ spark.spark }}</a><br />
+    {% else %}
+     {{ spark.spark }}<br />
+    {% endif %}
+   {% endfor %}
+  </div>
+ </div>
+</div>
+
+<div class="row">
+ <div class="eight columns">
+  <div class="drawer" id="drawer3" style="margin-top: 20px">
+   <h4>Actions</h4>
 {% for action in actions %}
   {% if action.url %}
     <a href="{{ action.url }}" target="_new">{{ action.action }}</a><br />
@@ -32,7 +66,7 @@
     {{ action.action }}<br />
   {% endif %}
 {% endfor %}
-
+  </div>
  </div>
 </div>
 {% endblock %}

@@ -5,8 +5,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from ideas.models import Ideas, Sparks, Actions, UserProfile
+from ideas.forms import IdeasForm, SparksForm, ActionsForm
 from django.core.paginator import Paginator,EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
+from itertools import chain
 
 # Create your views here.
 
@@ -16,9 +18,11 @@ def index(request):
 
 def ideas(request):
 	context = RequestContext(request)
-	idea_list = Ideas.objects.filter(is_parent=True).order_by('-date')
-	spark_list = Sparks.objects.order_by('-date')
-	paginator = Paginator(idea_list, 20)
+	idea_parents = Ideas.objects.filter(is_parent=True).order_by('-date')
+	spark_list = Sparks.objects.order_by('-date')[:5]
+	action_list = Actions.objects.order_by('-date')[:5]
+	idea_list = Ideas.objects.order_by('-date')[:5]
+	paginator = Paginator(idea_parents, 20)
 	page = request.GET.get('page')
 	try:
 		paginator = paginator.page(page)
@@ -27,7 +31,29 @@ def ideas(request):
 	except EmptyPage:
 		paginator = paginator.page(paginator.num_pages)
 
-	context_dict = {'idea_list': paginator, 'sparks': spark_list}
+	all_results = list(chain(spark_list,action_list,idea_list))
+
+	context_dict = {'idea_parents': paginator, 'results': all_results}
+	if request.method == 'POST':
+		form = IdeasForm(data=request.POST)
+		if form.is_valid():
+			ideas = form.save(commit=False)
+			ideas.save()
+			return HttpResponseRedirect('/ideas/')
+		else:
+			print form.errors
+	
+	else:
+		uname = request.user.username
+		try:
+			u = User.objects.get(username=uname)
+			form = IdeasForm(initial={'is_parent': True,'user': u.id})
+			context_dict['form'] = form
+		except:
+			pass
+		
+
+	
 	return render_to_response('ideas/ideas.html', context_dict, context)
 
 def view_idea(request, idea_id):
