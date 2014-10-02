@@ -53,13 +53,13 @@
     </div>
    </div>
  </div>
- <div class="six columns" style="border: 1px solid gray; border-radius: 10px; padding: 5px">
+ <div class="six columns" style="border: 1px solid gray; border-radius: 10px; padding: 5px; background: #f6f6f6">
    <h3>Latest Drops</h3>
   {% for r in results %}
     {% if r.spark %}
     	<i class="icon-light-up"></i>{% if r.url %}<a href="{{ r.url }}">{% endif %}{{ r.spark }}<br /></a></p>
     {% elif r.title %}
-    	<i class="icon-lamp"></i>{% if r.url %}<a href="{{ r.url }}">{% endif %}{{ r.title }}<br /></a></p>
+    	<i class="icon-lamp"></i><a href="view/{{ r.url }}">{{ r.title }}<br /></a></p>
     {% elif r.action %}
     	<i class="icon-calendar"></i><a href="view/{{ r.idea_id }}">{{ r.action }}<br /></a></p>
     {% else %}

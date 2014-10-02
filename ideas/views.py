@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from ideas.models import Ideas, Sparks, Actions, UserProfile
-from ideas.forms import IdeasForm, SparksForm, ActionsForm
+from ideas.forms import IdeasForm, SparksForm, ActionsForm, UserForm, UserProfileForm
 from django.core.paginator import Paginator,EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 from itertools import chain
@@ -21,7 +21,7 @@ def ideas(request):
 	idea_parents = Ideas.objects.filter(is_parent=True).order_by('-date')
 	spark_list = Sparks.objects.order_by('-date')[:5]
 	action_list = Actions.objects.order_by('-date')[:5]
-	idea_list = Ideas.objects.order_by('-date')[:5]
+	idea_list = Ideas.objects.filter(is_parent=False).order_by('-date')[:5]
 	paginator = Paginator(idea_parents, 20)
 	page = request.GET.get('page')
 	try:
@@ -31,7 +31,9 @@ def ideas(request):
 	except EmptyPage:
 		paginator = paginator.page(paginator.num_pages)
 
-	all_results = list(chain(spark_list,action_list,idea_list))
+
+	combined = list(spark_list) + list(action_list) + list(idea_list)
+	all_results = sorted(combined, key=lambda x : x.date, reverse=True)
 
 	context_dict = {'idea_parents': paginator, 'results': all_results}
 	if request.method == 'POST':
@@ -52,8 +54,6 @@ def ideas(request):
 		except:
 			pass
 		
-
-	
 	return render_to_response('ideas/ideas.html', context_dict, context)
 
 def view_idea(request, idea_id):
@@ -94,8 +94,8 @@ def register(request):
 		profile_form = UserProfileForm()
 
 	return render_to_response(
-			'news/register.html',
-			{'user_form': user_form, 'profile_form': profile_form, 'registered': registered, 'categories': cat_list(), 'root': "news"},
+			'ideas/register.html',
+			{'user_form': user_form, 'profile_form': profile_form, 'registered': registered },
 			context)
 
 

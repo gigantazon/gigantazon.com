@@ -1,0 +1,42 @@
+{% extends "ideas/base.html" %}
+
+
+{% block main %}
+{% if registered %}
+  <strong>Thank you for registering with Gigantazon.com</strong>
+  <a href="/ideas/">Go to the ideas</a>
+{% else %}
+
+<form id="user_form" method="post" action="/ideas/register/" enctype="multipart/form-data">
+  {% csrf_token %}
+  {% for field in user_form %}
+    {{ field.errors }}
+    <div class="row">
+      <div class="two columns">
+        {{ field.name.capitalize }}
+      </div>
+      <div class="four columns">
+        {{ field }}
+      </div>
+    </div>
+  {% endfor %}
+
+  {% for field in profile_form %}
+    {{ field.errors }}
+    <div class="row">
+      <div class="two columns">
+        {{ field.name.capitalize }}
+      </div>
+      <div class="four columns">
+        {{ field }}
+      </div>
+    </div>
+  {% endfor %}
+  <div class="row">
+   <div class="four columns">
+    <div class="small primary pretty button"><input type="submit" name="submit" value="Register"></a></div>
+   </div>
+  </div>
+</form>
+{% endif %}
+{% endblock %}

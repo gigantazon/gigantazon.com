@@ -236,7 +236,7 @@ html, body { height: 100%; }
 
 .icon-bag.icon-left a:before, .icon-bag.icon-right a:after, i.icon-bag:before { content: "\1f45c"; height: inherit; }
 
-.icon-calendar.icon-left a:before, .icon-calendar.icon-right a:after, i.icon-calendar:before { content: "\1f4c5"; height: inherit; }
+.icon-calendar.icon-left a:before, .icon-calendar.icon-right a:after, i.icon-calendar:before { content: "\1f4c5"; height: inherit; font-size: .75em;}
 
 .icon-login.icon-left a:before, .icon-login.icon-right a:after, i.icon-login:before { content: "\e740"; height: inherit; }
 
@@ -254,11 +254,11 @@ html, body { height: 100%; }
 
 .icon-hourglass.icon-left a:before, .icon-hourglass.icon-right a:after, i.icon-hourglass:before { content: "\23f3"; height: inherit; }
 
-.icon-lamp.icon-left a:before, .icon-lamp.icon-right a:after, i.icon-lamp:before { content: "\1f4a1"; height: inherit; }
+.icon-lamp.icon-left a:before, .icon-lamp.icon-right a:after, i.icon-lamp:before { content: "\1f4a1"; height: inherit; font-size: .75em; }
 
 .icon-light-down.icon-left a:before, .icon-light-down.icon-right a:after, i.icon-light-down:before { content: "\1f505"; height: inherit; }
 
-.icon-light-up.icon-left a:before, .icon-light-up.icon-right a:after, i.icon-light-up:before { content: "\1f506"; height: inherit; }
+.icon-light-up.icon-left a:before, .icon-light-up.icon-right a:after, i.icon-light-up:before { content: "\1f506"; height: inherit; font-size: .75em;}
 
 .icon-adjust.icon-left a:before, .icon-adjust.icon-right a:after, i.icon-adjust:before { content: "\25d1"; height: inherit; }
 
