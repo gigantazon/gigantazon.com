@@ -2,3 +2,11 @@
 We highly recommend you use SASS and write your custom styles in sass/_custom.scss.
 However, this blank file is available if you prefer
 */
+
+.idea { background-color: #feeeb1;padding: 5px }
+.spark { background-color: #fee5e5; padding: 5px;}
+.action { background-color: #e5e5fe; padding: 5px}
+
+li.idea, .alert.idea { background: #feeeb1; border: 1px solid #d5c47f; color: #255a32; }
+li.spark, .alert.spark { background: #fee5e5; border: 1px solid #e0a9a9; color: #255a32; }
+li.action, .alert.action { background: #e5e5fe; border: 1px solid #8787e3; color: #255a32; }

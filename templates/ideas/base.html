@@ -4,30 +4,14 @@
  <head>
   <title>Gigantazon.com - What's the big idea</title>
   <link rel="stylesheet" href="{% static "css/gumby.css" %}" />
+  <link rel="stylesheet" href="{% static "css/style.css" %}" />
   <script src="{% static "js/libs/modernizr-2.6.2.min.js" %}"></script>
   <script src="{% static "js/main.js" %}"></script>
   <script src="{% static "js/libs/gumby.js" %}"></script>
-  <script src="{% static "js/npajax.js" %}" type="text/javascript"></script>
   <script src="{% static "js/plugins.js" %}" type="text/javascript"></script>
-  <script>
-   var oldieCheck = Boolean(document.getElementsByTagName('html')[0].className.match(/\soldie\s/g));
-   if(!oldieCheck) {
-    document.write('<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"><\/script>');
-   } else {
-    document.write('<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"><\/script>');
-   }
-  </script>
-  <script gumby-touch="/static/js/libs" src="js/libs/gumby.js"></script>
-  <script src="{% static "js/libs/ui/gumby.retina.js" %}"></script>
-  <script src="{% static "js/libs/ui/gumby.fixed.js" %}"></script>
-  <script src="{% static "js/libs/ui/gumby.skiplink.js" %}"></script>
-  <script src="{% static "js/libs/ui/gumby.toggleswitch.js" %}"></script>
-  <script src="{% static "js/libs/ui/gumby.checkbox.js" %}"></script>
-  <script src="{% static "js/libs/ui/gumby.radiobtn.js" %}"></script>
-  <script src="{% static "js/libs/ui/gumby.tabs.js" %}"></script>
-  <script src="{% static "js/libs/ui/gumby.navbar.js" %}"></script>
-  <script src="{% static "js/libs/ui/jquery.validation.js" %}"></script>
-  <script src="{% static "js/libs/gumby.init.js" %}"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script gumby-touch="js/libs" src="/static/js/libs/gumby.js"></script>
+  <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
   <script type="text/javascript">
   function downloadJSAtOnload() {
   var element = document.createElement("script");
@@ -43,6 +27,8 @@
 
 
  </head>
+ {% block head %}
+ {% endblock %}
 <body>
 
 <div class="navbar" id="nav1">

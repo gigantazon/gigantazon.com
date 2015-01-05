@@ -1,8 +1,7 @@
 from django.contrib import admin
-from ideas.models import UserProfile, Ideas, Sparks, Actions
+from ideas.models import UserProfile, Drops, Comments
 
 # Register your models here.
 admin.site.register(UserProfile)
-admin.site.register(Ideas)
-admin.site.register(Sparks)
-admin.site.register(Actions)
+admin.site.register(Drops)
+admin.site.register(Comments)

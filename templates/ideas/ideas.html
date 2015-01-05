@@ -21,51 +21,36 @@
  </div>
 </div>
 <div class="row">
- <div class="six columns">
-  <div class="row" style="margin-left: 0px">
-   <div class="twelve columns">
+ <div class="push_one five columns">
  	<h3>Big Ideas</h3>
-{% for idea in idea_parents %}
-	<i class="icon-lamp"></i><a href="view/{{ idea.id }}">{{ idea.title }}</a></p>
+  <ul>
+{% for drop in drop_parents %}
+	 <a href="view/{{ drop.id }}"><li class="default alert"><i class="icon-lamp"></i>{{ drop.data|title|truncatechars:100 }}</li></a>
 {% endfor %}
-	
+	</ul>
 {% if idea_parents.has_next %}
 	<a href="?page={{ idea_parents.next_page_number }}">next</a>
 {% endif %}
-   </div>
-  </div>
-  <div class="row" style="margin-left: 0px; margin-top: 20px">
-  	<div class="twelve columns">
-     {% if user.is_authenticated %}
-     <form id="ideas_form" method="post" action="/ideas/">
-	{{ form.user }}
-       {% csrf_token %}
-       {% for hidden in form.hidden_fields %}
-       	 {{ hidden }}
-       {% endfor %}
-       <ul>
-       	  {{ form.errors }}
-        <li class="field">{{ form.title}}<br />
-         <div class="medium pretty secondary btn" style="width: 100px"><input type="submit" name="submit" value="Submit Idea"></div></li>
-
-     </form> 
-     {% endif %}
-    </div>
-   </div>
  </div>
- <div class="six columns" style="border: 1px solid gray; border-radius: 10px; padding: 5px; background: #f6f6f6">
-   <h3>Latest Drops</h3>
-  {% for r in results %}
-    {% if r.spark %}
-    	<i class="icon-light-up"></i>{% if r.url %}<a href="{{ r.url }}">{% endif %}{{ r.spark }}<br /></a></p>
-    {% elif r.title %}
-    	<i class="icon-lamp"></i><a href="view/{{ r.url }}">{{ r.title }}<br /></a></p>
-    {% elif r.action %}
-    	<i class="icon-calendar"></i><a href="view/{{ r.idea_id }}">{{ r.action }}<br /></a></p>
-    {% else %}
-    	{{ pass }}
-    {% endif %}
-  {% endfor %}
+ <div class="push_one four columns">
+  <div class="row">
+    <div class="twelve columns">
+        <ul>
+          {% for r in latest %}
+           {% if r.drop_type == 'spark' %}
+             <li class="default spark">{% if r.url %}<a href="{{ r.url }}">{% endif %}{{ r.data|truncatechars:100}}</a></p></li>
+            {% elif r.drop_type == 'idea' %}
+    	       <li class="default idea"><a href="view/{{ r.url }}">{{ r.data|truncatechars:100 }}</a></p></li>
+            {% elif r.drop_type == 'action' %}
+    	       <li class="default action"><a href="view/{{ r.idea_id }}">{{ r.data|truncatechars:100 }}</a></p></li>
+            {% else %}
+    	       {{ pass }}
+            {% endif %}
+          {% endfor %}
+        </ul>
+    </div>
+  </div>
+ </div>
 </div>
 
 {% endblock %}

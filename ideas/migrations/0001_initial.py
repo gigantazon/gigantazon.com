@@ -12,52 +12,45 @@ class Migration(SchemaMigration):
         db.create_table(u'ideas_userprofile', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('user', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['auth.User'], unique=True)),
+            ('username', self.gf('django.db.models.fields.CharField')(max_length=25)),
             ('website', self.gf('django.db.models.fields.URLField')(max_length=200, blank=True)),
         ))
         db.send_create_signal(u'ideas', ['UserProfile'])
 
-        # Adding model 'Ideas'
-        db.create_table(u'ideas_ideas', (
+        # Adding model 'Drops'
+        db.create_table(u'ideas_drops', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=128)),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['ideas.UserProfile'])),
+            ('data', self.gf('django.db.models.fields.CharField')(max_length=250)),
+            ('drop_type', self.gf('django.db.models.fields.CharField')(max_length=15)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('date', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+            ('parent_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['ideas.Drops'], null=True)),
+            ('origin_id', self.gf('django.db.models.fields.PositiveSmallIntegerField')(max_length=10)),
         ))
-        db.send_create_signal(u'ideas', ['Ideas'])
+        db.send_create_signal(u'ideas', ['Drops'])
 
-        # Adding model 'Sparks'
-        db.create_table(u'ideas_sparks', (
+        # Adding model 'Comments'
+        db.create_table(u'ideas_comments', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('idea', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['ideas.Ideas'])),
-            ('spark', self.gf('django.db.models.fields.CharField')(max_length=300)),
-            ('url', self.gf('django.db.models.fields.URLField')(max_length=200, blank=True)),
+            ('idea', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['ideas.Drops'])),
+            ('comment', self.gf('django.db.models.fields.CharField')(max_length=5000)),
             ('date', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('path', self.gf('dbarray.fields.IntegerArrayField')(blank=True)),
+            ('depth', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0, blank=True)),
         ))
-        db.send_create_signal(u'ideas', ['Sparks'])
-
-        # Adding model 'Actions'
-        db.create_table(u'ideas_actions', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('idea', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['ideas.Ideas'])),
-            ('action', self.gf('django.db.models.fields.CharField')(max_length=300)),
-            ('url', self.gf('django.db.models.fields.URLField')(max_length=200, blank=True)),
-            ('date', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-        ))
-        db.send_create_signal(u'ideas', ['Actions'])
+        db.send_create_signal(u'ideas', ['Comments'])
 
 
     def backwards(self, orm):
         # Deleting model 'UserProfile'
         db.delete_table(u'ideas_userprofile')
 
-        # Deleting model 'Ideas'
-        db.delete_table(u'ideas_ideas')
+        # Deleting model 'Drops'
+        db.delete_table(u'ideas_drops')
 
-        # Deleting model 'Sparks'
-        db.delete_table(u'ideas_sparks')
-
-        # Deleting model 'Actions'
-        db.delete_table(u'ideas_actions')
+        # Deleting model 'Comments'
+        db.delete_table(u'ideas_comments')
 
 
     models = {
@@ -97,33 +90,31 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        u'ideas.actions': {
-            'Meta': {'object_name': 'Actions'},
-            'action': ('django.db.models.fields.CharField', [], {'max_length': '300'}),
+        u'ideas.comments': {
+            'Meta': {'object_name': 'Comments'},
+            'comment': ('django.db.models.fields.CharField', [], {'max_length': '5000'}),
             'date': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
+            'depth': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'idea': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ideas.Ideas']"}),
-            'url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'})
+            'idea': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ideas.Drops']"}),
+            'path': ('dbarray.fields.IntegerArrayField', [], {'blank': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"})
         },
-        u'ideas.ideas': {
-            'Meta': {'object_name': 'Ideas'},
+        u'ideas.drops': {
+            'Meta': {'object_name': 'Drops'},
+            'data': ('django.db.models.fields.CharField', [], {'max_length': '250'}),
             'date': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
+            'drop_type': ('django.db.models.fields.CharField', [], {'max_length': '15'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ideas.UserProfile']"})
-        },
-        u'ideas.sparks': {
-            'Meta': {'object_name': 'Sparks'},
-            'date': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'idea': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ideas.Ideas']"}),
-            'spark': ('django.db.models.fields.CharField', [], {'max_length': '300'}),
-            'url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'})
+            'origin_id': ('django.db.models.fields.PositiveSmallIntegerField', [], {'max_length': '10'}),
+            'parent_id': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ideas.Drops']", 'null': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"})
         },
         u'ideas.userprofile': {
             'Meta': {'object_name': 'UserProfile'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'user': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['auth.User']", 'unique': 'True'}),
+            'username': ('django.db.models.fields.CharField', [], {'max_length': '25'}),
             'website': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'})
         }
     }
