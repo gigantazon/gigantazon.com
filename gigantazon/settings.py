@@ -24,7 +24,7 @@ STATICFILES_DIRS = (
         STATIC_PATH,
 )
 
-MEDIA_ROOT = "/home/matt/django/gigantazon/media/"
+MEDIA_ROOT = ""
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
@@ -71,10 +71,10 @@ WSGI_APPLICATION = 'gigantazon.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'gigantazon',
-	'USER': 'gigantic',
-	'PASSWORD': 'g1gant1c', ## Gig@ntaZ0n
+        'ENGINE': '',
+        'NAME': '',
+	'USER': '',
+	'PASSWORD': '', ## Gig@ntaZ0n
 	'HOST': '127.0.0.1',
 	'PORT': '5432',
     }
@@ -101,10 +101,10 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'secure.emailsrvr.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'matt@ciranttechnologies.com'
-EMAIL_HOST_PASSWORD = '10C!r1n0ct'
+EMAIL_HOST = ''
+EMAIL_PORT = 
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 SERVER_EMAIL = EMAIL_HOST_USER
