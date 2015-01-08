@@ -74,7 +74,7 @@ DATABASES = {
         'ENGINE': '',
         'NAME': '',
 	'USER': '',
-	'PASSWORD': '', ## Gig@ntaZ0n
+	'PASSWORD': '', ## 
 	'HOST': '127.0.0.1',
 	'PORT': '5432',
     }
