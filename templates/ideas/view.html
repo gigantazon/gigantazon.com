@@ -1,21 +1,71 @@
 {% extends "ideas/base.html" %}
+{% load static %}
 {% block head %}
 <script>
 $(document).ready(function(){
-  var ideaid;
-  $("#idea_list").on("click", ".ideas", function(event){
-   $('#data').empty();
-   event.preventDefault();
-   $('#'+ideaid).removeClass('idea');
-   ideaid = $(this).parent().attr("id");
-   $('#'+ideaid).addClass('idea alert');
-    $.get('/ideas/get_idea/', {idea_id: ideaid}, function(data){
-     $.each(data, function( i, obj ) {
-      var data = obj.fields.data;
-       $('#data').append("<p><a href='/ideas/view/" + ideaid + "'>" + data + "</p>");
-      });
-    });
-  });
+  var idea_id = {{ title.id }}
+  var url = "/ideas/view/subs/"+idea_id
+    $.ajax({
+      type: "GET",
+      url: url,
+      success: function(data)
+      {
+        $.each(data, function(index, val) {
+          var url = "/ideas/view/is_parent/"+val.id
+          $.ajax({
+            type: "GET",
+            url: url,
+            success: function(subs)
+            {
+              if ( subs > 0 ) {
+                if ( val.drop_type === 'spark'){
+                  $('ul#spark_list').append("<li id='"+val.id+"'><a href='#' class='parent'>"+val.data+"</a></li>")
+                } else if ( val.drop_type === 'idea') {
+                  $('ul#idea_list').append("<li id='"+val.id+"'><a href='#' class='parent'>"+val.data+"</a></li>")
+                } else if ( val.drop_type === 'action') {
+                  $('ul#spark_list').append("<li id='"+val.id+"'><a href='#' class='parent'>"+val.data+"</a></li>")
+                }
+              } else {
+                if ( val.drop_type === 'spark'){
+                  $('ul#spark_list').append("<li id='"+val.id+"'>"+val.data+"</li>")
+                } else if ( val.drop_type === 'idea') {
+                  $('ul#idea_list').append("<li id='"+val.id+"'>"+val.data+"</li>")
+                } else if ( val.drop_type === 'action') {
+                  $('ul#spark_list').append("<li id='"+val.id+"'>"+val.data+"</li>")
+                }
+              }
+            }
+          })
+
+        })
+      }
+    })
+  $( document ).on('click', 'a.parent', function(e){
+    e.preventDefault;
+    var idea_id = $(this).parent().prop('id');
+    var url = "/ideas/view/subs/"+idea_id
+    $.ajax({
+      type: "GET",
+      url: url,
+      success: function(data)
+      {
+        $("div#sub1").remove();
+        $('div#main').after("<div class='row' id='sub1'><div class='col-md-8 col-md-offset-3'><div class='row'>\
+          <div class='col-md-4'><div class='spark alert'><center><h4>Sparks</center></h4></div><ul class='list-unstyled' id='sub_sparks'></ul></div>\
+          <div class='col-md-4'><div class='idea alert'><center><h4>Ideas</center></h4></div><ul class='list-unstyled' id='sub_ideas'></ul></div>\
+          <div class='col-md-4'><div class='action alert'><center><h4>Actions</center></h4></div><ul class='list-unstyled' id='sub_actions'></ul></div></div></div>")
+        $.each(data, function(index, val) {
+          if ( val.drop_type === 'spark') {
+            $('ul#sub_sparks').append("<li id='"+val.id+"'>"+val.data+"</li>")
+          } else if ( val.drop_type === 'idea' ) {
+            $('ul#sub_ideas').append("<li id='"+val.id+"'>"+val.data+"</li>")
+          } else if ( val.drop_type === 'action' ){
+            $('ul#sub_actions').append("<li id='"+val.id+"'>"+val.data+"</li>")
+          }
+        })
+      }
+    })
+  })
  });   
 </script>
   <script
@@ -31,164 +81,56 @@ $(document).ready(function(){
 {% endblock %}
 
 {% block main %}
-{% if ideas.parent_id != Null %}
-<div class="row">
- <div class="eight columns">
-  <a href="/ideas/view/{{ ideas.parent_id_id }}">Back to parent</a>
- </div>
-</div>
-{% endif %}
+<div class="container-fluid">
 
 <div class="row">
- <div class="eight columns">
-  <h4>{{ ideas.data|title }}</h4>
+ <div class="col-md-8">
+  <h2>{{ title|title }}</h2>
  </div>
 </div>
 
-<div class="row" style="margin-top: 20px;">
- <div class="three columns" id="svg">
-  
+<div class="row" id="main" style="margin-top: 20px;">
+ <div class="col-md-3" id="svg">
  </div>
- <div class="nine columns">
+
+ <div class="col-md-8">
+
   <div class="row" style="min-height: 250px">
-    <div class="four columns">
-     <li class="spark alert"><center><h4>Sparks</h4></center></li>
-     <ul id="spark_list">
-     {% for sub in subs %}
-      {% if sub.drop_type == "spark" %}
-       {% if sub.url %}
-        <li id=""><a href="{{sub.url}}" target="_new"><i class="icon-link"></a></i><a href="" class="sparks">{{ sub.data }}</a></li>
-       {% else %}
-        <li id=""></i>{{ sub.data }}</li>
-       {% endif %}
-      {% endif %}
-     {% endfor %}
+
+    <div class="col-md-4">
+     <div class="spark alert"><center><h4>Sparks</h4></center></div>
+     <ul id="spark_list" class="list-unstyled">
+
      </ul>
-     <a href="">-Add Spark</a>
     </div>
 
-    <div class="four columns">
-     <li class="idea alert" id="title"><center><h4>Ideas</h4></center></li>
-      <ul id="idea_list">
-      {% for sub in subs %}
-        {% if sub.drop_type == "idea" %}
-         <li id="{{ sub.id }}"><a href="" class="ideas">{{ sub.data }}</a></li>
-        {% endif %}
-      {% endfor %}
+    <div class="col-md-4">
+     <div class="idea alert" id="title"><center><h4>Ideas</h4></center></div>
+      <ul id="idea_list" class="list-unstyled">
+
       </ul>
-      <a href="">-Add Idea</a>
     </div>
 
-    <div class="four columns">
-     <li class="action alert"><center><h4 class="">Actions</h4></center></li>
-     <ul id="action_list">
-      {% for sub in subs %}
-       {% if sub.drop_type == "action" %}
-        <li id=""><a href="{{ action.url }}" target="_new">{{ sub.data }}</a></li>
-       {% endif %}
-      {% endfor %}
+    <div class="col-md-4">
+     <div class="action alert"><center><h4 class="">Actions</h4></center></div>
+     <ul id="action_list" class="list-unstyled">
+
       </ul>
-      <a href="">-Add Action</a>
     </div>
 
-  </div>
- </div>
- </div>
-</div>
-<div class="row" style="margin-top: 50px"></div>
+  </div><!-- row -->
+ </div><!-- column -->
+</div><!-- row -->
+
+
 <div class="row">
- <div class="three columns">
- </div>
- <div class="eight columns">
-  <div class="row">
-    <div class="twelve columns">
-     <div id="data">
+  <div class="col-md-8 col-md-offset-3">
+    <div id="data">
     </div>  
- </div>
+  </div>
 </div>
 
-<script type="text/javascript">
- 
-/* Set the diagrams Height & Width */
-    var h = 300, w = 300;
-/* Set the color scale we want to use */
-    var color = d3.scale.category20();
-/* Establish/instantiate an SVG container object */
-    var svg = d3.select("#svg")
-                    .append("svg")
-                    .attr("height",h)
-                    .attr("width",w);
-/* Build the directional arrows for the links/edges */
-        svg.append("svg:defs")
-                    .selectAll("marker")
-                    .data(["end"]) 
-                    .enter().append("svg:marker")
-                    .attr("id", String)
-                    .attr("viewBox", "0 -5 10 10")
-                    .attr("refX", 15)
-                    .attr("refY", -1.5)
-                    .attr("markerWidth", 6)
-                    .attr("markerHeight", 6)
-                    .attr("orient", "auto")
-                    .append("svg:path")
-                    .attr("d", "M0,-5L10,0L0,5");
-/* Pre-Load the json data using the queue library */
-queue()
-    .defer(d3.json, "/static/nodes.json")
-    .defer(d3.json, "/static/links.json")
-    .await(makeDiag); 
-/* Define the main worker or execution function */
-var jsonCircles = {{json_nodes|safe}}
-console.log(jsonCircles)
-function makeDiag(error, nodes, links, table) {
-    /* Draw the node labels first */
-   var texts = svg.selectAll("text")
-                    .data(nodes)
-                    .enter()
-                    .append("text")
-                    .attr("fill", "black")
-                    .attr("font-family", "sans-serif")
-                    .attr("font-size", "10px")
-                    .text(function(d) { return d.name; }); 
-    /* Establish the dynamic force behavor of the nodes */
-    var force = d3.layout.force()
-                    .nodes(nodes)
-                    .links(links)
-                    .size([w,h])
-                    .linkDistance([80])
-                    .charge([-300])
-                    .gravity(0.3)
-                    .start();
-    /* Draw the edges/links between the nodes */
-    var edges = svg.selectAll("line")
-                    .data(links)
-                    .enter()
-                    .append("line")
-                    .style("stroke", "#000")
-                    .style("stroke-width", 1)
-                    .attr("marker-end", "url(#end)");
-    /* Draw the nodes themselves */                
-    var nodes = svg.selectAll("circle")
-                    .data(nodes)
-                    .enter()
-                    .append("circle")
-                    .attr("r", 15)
-                    .attr("opacity", 0.5)
-                    .style("fill", function(d,i) { return color(i); })
-                    .call(force.drag);
-    /* Run the Force effect */
-    force.on("tick", function() {
-               edges.attr("x1", function(d) { return d.source.x; })
-                    .attr("y1", function(d) { return d.source.y; })
-                    .attr("x2", function(d) { return d.target.x; })
-                    .attr("y2", function(d) { return d.target.y; });
-               nodes.attr("cx", function(d) { return d.x; })
-                    .attr("cy", function(d) { return d.y; })
-               texts.attr("transform", function(d) {
-                        return "translate(" + d.x + "," + d.y + ")";
-                        });
-               }); // End tick func
-}; // End makeDiag worker func
-</script>
+</div><!-- container -->
+
 
 {% endblock %}

@@ -50,6 +50,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles', 
     'south',
     'ideas',
+    'rest_framework',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -71,12 +72,12 @@ WSGI_APPLICATION = 'gigantazon.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': '',
-        'NAME': '',
-	'USER': '',
-	'PASSWORD': '', ## 
-	'HOST': '127.0.0.1',
-	'PORT': '5432',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'gigantazon',
+	    'USER': 'gigantic',
+	    'PASSWORD': 'Justin01', ## 
+    	'HOST': '127.0.0.1',
+	    'PORT': '5432',
     }
 }
 
@@ -100,12 +101,12 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
-EMAIL_USE_TLS = True
-EMAIL_HOST = ''
-EMAIL_PORT = 
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
+#EMAIL_USE_TLS = True
+#EMAIL_HOST = ''
+#EMAIL_PORT = 
+#EMAIL_HOST_USER = ''
+#EMAIL_HOST_PASSWORD = ''
 
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-SERVER_EMAIL = EMAIL_HOST_USER
+#DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+#SERVER_EMAIL = EMAIL_HOST_USER
 LOGIN_URL = '/ideas/login'

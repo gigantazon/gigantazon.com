@@ -13,12 +13,20 @@ import json, collections
 from django.forms.models import model_to_dict
 from django.core import serializers
 from django.db.models import Q
-
+from rest_framework.renderers import JSONRenderer
+from rest_framework.parsers import JSONParser
+from ideas.serializers import DropsSerializer
 # Create your views here.
 
 def index(request):
 	context = RequestContext(request)
     	return  render_to_response('ideas/index.html', context)
+
+class JSONResponse(HttpResponse):
+	def __init__(self, data, **kwargs):
+		content = JSONRenderer().render(data)
+		kwargs['content_type'] = 'application/json'
+		super(JSONResponse, self).__init__(content, **kwargs)
 
 def ideas(request):
 	context = RequestContext(request)
@@ -58,55 +66,23 @@ def ideas(request):
 
 def view_idea(request, idea_id):
 	context = RequestContext(request)
-	idea_data = Drops.objects.get(pk=idea_id)
-	idea_subs = Drops.objects.filter(parent_id=idea_id)
-	form = CommentForm(initial={'user': request.user, 'idea': idea_id})
+	title = Drops.objects.get(pk=idea_id)
+	
+	context_dict = { 'title': title }
 
-	drops = Drops.objects.filter(Q(pk=idea_id)|Q(origin_id=idea_id))
-
-	sql = "select id,data as name from ideas_drops where id=%(id)s or origin_id=%(id)s" % {'id': idea_id}
-	nodes_raw = Drops.objects.raw(sql)
-	objects_list = []
-	for row in nodes_raw:
-		d = collections.OrderedDict()
-		d['name'] = row.name.replace('"', '\'')
-		objects_list.append(d)
-	j = json.dumps( objects_list )
-
-	data = serializers.serialize('json', drops)
-	context_dict = {'ideas': idea_data, 'subs': idea_subs,'form': form, 'json_data': data, 'json_nodes': j}
-
-	if request.method == 'POST':
-		form = CommentForm(request.POST)
-		if form.is_valid():
-			frm = form.save(commit=False)
-			parent = form['parent'].value()
-
-			if parent =='':
-				frm.path = []
-				frm.depth = 0
-				frm.save()
-				frm.path = [frm.id]
-			else:
-				node = Comments.objects.get(id=parent)
-				if node.depth >= 5:
-					frm.depth = 5
-				else:
-					frm.depth = node.depth + 1
-				frm.path = node.path
-				frm.save()
-				frm.path.append(frm.id)
-			frm.save()
-			return HttpResponseRedirect('/ideas/view/' + idea_id)
-		else:
-			print form.errors
-
-	try:
-		comments = Comments.objects.filter(idea=idea_id).order_by('path')
-		context_dict['comments'] = comments
-	except:
-		pass
 	return render_to_response('ideas/view.html', context_dict, context)
+
+def get_idea_subs(request, idea_id):
+	context = RequestContext(request)
+	drops = Drops.objects.filter(parent_id=idea_id)
+
+	serializer = DropsSerializer(drops, many=True)
+	return JSONResponse(serializer.data)
+
+def is_parent(request, idea_id):
+	context = RequestContext(request)
+	drops = Drops.objects.filter(parent_id=idea_id).count()
+	return HttpResponse(drops)
 
 
 def register(request):
@@ -166,17 +142,6 @@ def user_login(request):
 def user_logout(request):
 	logout(request)
 	return HttpResponseRedirect('/')		
-
-def get_idea(request):
-	context = RequestContext(request)
-	idea_id=None
-	if request.method == 'GET':
-		idea_id = request.GET['idea_id']
-	
-	if idea_id:
-		drops = Drops.objects.filter(parent_id_id=idea_id)
-		data = serializers.serialize('json', drops)
-	return HttpResponse(data, content_type='application/json')
 
 def d3_map(request):
 	context = RequestContext(request)

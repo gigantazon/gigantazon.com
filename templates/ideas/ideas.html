@@ -3,39 +3,26 @@
 
 {% block main %}
 <div class="row">
- <div class="six columns">
-  {% if user.is_authenticated %}
-    {{ pass }}
-  {% else %}  
-  <form id="login" method="post" action="/ideas/login/">
-    {% csrf_token %}
-   <ul>
-    <li class="field"><input class="narrow input" type="text" placeholder="Username" name="username">
-     <input class="narrow input" type="password" placeholder="Password" name="password">
-    <div class="medium pretty secondary btn" style="width: 100px"><input type="submit" name="submit" value="Login"></div>
-    <a href="/ideas/password/reset/"><span style="font-size: 10px;">Forgot password?</span></a>
-    </li>
-   </ul>  
- </form>
- {% endif %}
+ <div class="col-md-6">
+
  </div>
 </div>
 <div class="row">
- <div class="push_one five columns">
+ <div class="col-md-5 col-md-offset-1">
  	<h3>Big Ideas</h3>
-  <ul>
+  <ul class="list-unstyled">
 {% for drop in drop_parents %}
-	 <a href="view/{{ drop.id }}"><li class="default alert"><i class="icon-lamp"></i>{{ drop.data|title|truncatechars:100 }}</li></a>
+	 <a href="view/{{ drop.id }}"><li class="default ">{{ drop.data|title|truncatechars:100 }}</li></a>
 {% endfor %}
 	</ul>
 {% if idea_parents.has_next %}
 	<a href="?page={{ idea_parents.next_page_number }}">next</a>
 {% endif %}
  </div>
- <div class="push_one four columns">
+ <div class="col-md-4 col-md-offset-1">
   <div class="row">
-    <div class="twelve columns">
-        <ul>
+    <div class="col-md-12">
+        <ul class="list-unstyled">
           {% for r in latest %}
            {% if r.drop_type == 'spark' %}
              <li class="default spark">{% if r.url %}<a href="{{ r.url }}">{% endif %}{{ r.data|truncatechars:100}}</a></p></li>
