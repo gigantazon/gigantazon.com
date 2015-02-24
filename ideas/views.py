@@ -15,7 +15,7 @@ from django.core import serializers
 from django.db.models import Q
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
-from ideas.serializers import DropsSerializer
+from ideas.serializers import DropsSerializer, D3Serializer
 # Create your views here.
 
 def index(request):
@@ -74,10 +74,26 @@ def view_idea(request, idea_id):
 
 def get_idea_subs(request, idea_id):
 	context = RequestContext(request)
-	drops = Drops.objects.filter(parent_id=idea_id)
+	drops = Drops.objects.filter(Q(parent_id=idea_id)|Q(origin_id=idea_id))
 
 	serializer = DropsSerializer(drops, many=True)
 	return JSONResponse(serializer.data)
+
+def d3_map(request, idea_id):
+	context = RequestContext(request)
+	drops = Drops.objects.filter(Q(parent_id=idea_id)|Q(origin_id=idea_id))
+
+	serializer = D3Serializer(drops, many=True)
+	data = []
+	count = 0
+	for d in drops:
+		data.append({'source': count, 'target': count})
+		count = count+1
+	jdata = json.dumps(data)
+	ldata = json.loads(jdata)
+
+
+	return JSONResponse({'nodes': serializer.data, 'links': ldata})
 
 def is_parent(request, idea_id):
 	context = RequestContext(request)
@@ -142,13 +158,4 @@ def user_login(request):
 def user_logout(request):
 	logout(request)
 	return HttpResponseRedirect('/')		
-
-def d3_map(request):
-	context = RequestContext(request)
-	drop_id=None
-	if request.method == 'GET':
-		drop_id = request.GET['drop_id']
-	if drop_id:
-		drops = Drops.objects.filter(Q(pk=drop_id)|Q(origin_id=drop_id))
-		data = serializers.serialize('json', drops)
-		return HttpResponse(drops, content_type='application/json')		
+	
