@@ -12,6 +12,6 @@ urlpatterns = patterns('',
 
   	url(r'^admin/', include(admin.site.urls)),
 	url(r'^ideas/', include('ideas.urls')),
-	url(r'^$', 'ideas.views.index', name='index'),
-	url(r'^index2/$', TemplateView.as_view(template_name='index2.html')),
+	#url(r'^$', 'ideas.views.index', name='index'),
+	url(r'^$', TemplateView.as_view(template_name='index2.html')),
 )

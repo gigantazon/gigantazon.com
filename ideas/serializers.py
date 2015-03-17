@@ -16,4 +16,4 @@ class D3Serializer(serializers.ModelSerializer):
 	name = serializers.CharField(source="data")
 	class Meta:
 		model = Drops
-		fields = ( 'name', 'id')
+		fields = ( 'id', 'name',)

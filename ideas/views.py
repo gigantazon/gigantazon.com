@@ -81,14 +81,15 @@ def get_idea_subs(request, idea_id):
 
 def d3_map(request, idea_id):
 	context = RequestContext(request)
-	drops = Drops.objects.filter(Q(parent_id=idea_id)|Q(origin_id=idea_id))
+	drops = Drops.objects.filter(Q(parent_id=idea_id)|Q(origin_id=idea_id)|Q(id=idea_id))
 
 	serializer = D3Serializer(drops, many=True)
 	data = []
-	count = 0
 	for d in drops:
-		data.append({'source': count, 'target': count})
-		count = count+1
+		if d.parent_id_id is None:
+			data.append({'source': d.id, 'target': d.id, 'value': 0})
+		else:
+			data.append({'source': d.id, 'target': d.parent_id_id, 'value': 0})
 	jdata = json.dumps(data)
 	ldata = json.loads(jdata)
 
