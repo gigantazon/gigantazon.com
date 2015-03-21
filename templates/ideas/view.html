@@ -97,7 +97,7 @@ $(document).ready(function(){
  </div>
 <script type="text/javascript">
     
-    var width = 200,
+    var width = 300,
         height = 200;
     
     var color = d3.scale.category20();
@@ -114,6 +114,7 @@ $(document).ready(function(){
         .attr("pointer-events", "all");
     
     d3.json("/ideas/view/map/"+{{ title.id }}, function( error, json) {
+      console.log(json);
       var edges = [];
          json.links.forEach(function(e){
           var sourceNode = json.nodes.filter(function(n) { return n.id === e.source; })[0],
@@ -132,14 +133,19 @@ $(document).ready(function(){
           .data(edges)
         .enter().append("line")
           .attr("class", "link")
-          .style("stroke-width", function(d) { return Math.sqrt(d.value); });
+          /*.style("stroke-width", function(d) { return Math.sqrt(d.value); });*/
+          .style("stroke-width", "1px");
     
       var node = svg.selectAll("circle.node")
           .data(json.nodes)
         .enter().append("circle")
           .attr("class", "node")
-          .attr("r", 5)
-          .style("fill", function(d) { return color(d.group); })
+          .attr("r", function(d){return d.weight+5;})
+          .style("fill", function(d) { // return color(d.group); })
+            if(d.drop_type==='idea') return "#fefeb5";
+            if(d.drop_type==='spark') return "#fed3d3";
+            if(d.drop_type==='action') return "#babafe";
+          })
           .call(force.drag);
     
       node.append("title")
