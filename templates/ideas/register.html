@@ -2,41 +2,45 @@
 
 
 {% block main %}
-{% if registered %}
-  <strong>Thank you for registering with Gigantazon.com</strong>
-  <a href="/ideas/">Go to the ideas</a>
-{% else %}
+<div class="row">
+ <div class="col-md-5 col-md-offset-1">
+  {% if registered %}
+    <strong>Thank you for registering with Gigantazon.com</strong>
+    <a href="/ideas/">Go to the ideas</a>
+  {% else %}
 
-<form id="user_form" method="post" action="/ideas/register/" enctype="multipart/form-data">
-  {% csrf_token %}
-  {% for field in user_form %}
-    {{ field.errors }}
-    <div class="row">
-      <div class="two columns">
-        {{ field.name.capitalize }}
+  <form id="user_form" method="post" action="/ideas/register/" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% for field in user_form %}
+      {{ field.errors }}
+      <div class="row">
+        <div class="md-col-2">
+          {{ field.name.capitalize }}
+        </div>
+        <div class="md-col-4">
+          {{ field }}
+        </div>
       </div>
-      <div class="four columns">
-        {{ field }}
-      </div>
-    </div>
-  {% endfor %}
+    {% endfor %}
 
-  {% for field in profile_form %}
-    {{ field.errors }}
+    {% for field in profile_form %}
+      {{ field.errors }}
+      <div class="row">
+        <div class="md-col-2">
+          {{ field.name.capitalize }}
+        </div>
+        <div class="md-col-4">
+          {{ field }}
+        </div>
+      </div>
+    {% endfor %}
     <div class="row">
-      <div class="two columns">
-        {{ field.name.capitalize }}
-      </div>
-      <div class="four columns">
-        {{ field }}
-      </div>
+    <div class="md-col-4">
+      <div class="small primary pretty button"><input type="submit" name="submit" value="Register"></a></div>
     </div>
-  {% endfor %}
-  <div class="row">
-   <div class="four columns">
-    <div class="small primary pretty button"><input type="submit" name="submit" value="Register"></a></div>
-   </div>
-  </div>
-</form>
-{% endif %}
+    </div>
+  </form>
+  {% endif %}
+ </div>
+</div>
 {% endblock %}

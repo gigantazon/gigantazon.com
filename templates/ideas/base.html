@@ -57,9 +57,16 @@ $(document).ready(function(){
            </form>
           </ul>
         </li>
+        <li><a href="/ideas/register/">Register</a></li>
         {% endif %}
+
         <li><a href="/ideas">Home</a></li>
       </ul>
+        {% if user.is_authenticated %}
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/ideas/profile/">Profile</a></li>
+      </ul>
+      {% endif %}      
     </div>
   </div>
 </nav>

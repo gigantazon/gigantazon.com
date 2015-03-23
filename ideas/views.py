@@ -1,6 +1,6 @@
 from django.shortcuts import render, render_to_response
 from django.template import RequestContext
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -159,4 +159,27 @@ def user_login(request):
 def user_logout(request):
 	logout(request)
 	return HttpResponseRedirect('/')		
+
+@login_required(login_url='/ideas/login/')
+def profile(request):
+	context = RequestContext(request)
+	uid = request.user
+
+	try:
+		profile = UserProfile.objects.get(user=uid)
+		drops = Drops.objects.filter(user=uid)		
+	except:
+		raise Http404
+
+
+
+	context_dict = {'profile': profile, 'drops': drops }
+	if request.method == 'POST':
+		try:
+			profile.picture = request.FILES['picture']
+			profile.save()
+		except Exception, e:
+			raise
+		return HttpResponseRedirect('/ideas/profile/')
+	return render_to_response('ideas/profile.html', context_dict, context)
 	
