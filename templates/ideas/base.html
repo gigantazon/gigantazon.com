@@ -61,6 +61,18 @@ $(document).ready(function(){
         {% endif %}
 
         <li><a href="/ideas">Home</a></li>
+        <li style="width: 400px">
+       <form class="navbar-form navbar-left" role="search" action="" method="post" id="search"> {% csrf_token %}
+        <div class="input-group">
+         <input type="text" class="form-control" placeholder="Doesn't work yet" name="search" id="search">
+         <input type="hidden" id="search-id">
+         <p id="search-description"></p>
+         <span class="input-group-btn">
+          <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+         </span>
+        </div>
+       </form>
+       </li>
       </ul>
         {% if user.is_authenticated %}
       <ul class="nav navbar-nav navbar-right">
@@ -69,6 +81,8 @@ $(document).ready(function(){
       {% endif %}      
     </div>
   </div>
+  <div class="row">
+    <div class="" style="background: #7c7c7c; height:2px">
 </nav>
 
 {% block main %}

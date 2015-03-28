@@ -54,3 +54,13 @@ blockquote {
   stroke: #555555;
   stroke-width: 1.5px;
 }
+
+li.default > a {
+  color: #6a6a6a;
+}
+
+.nav2 > li > a:hover,
+.nav2 > li > a:focus {
+  text-decoration: none;
+  background-color: #fff;
+}

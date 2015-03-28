@@ -31,7 +31,7 @@ class JSONResponse(HttpResponse):
 def ideas(request):
 	context = RequestContext(request)
 	drop_parents = Drops.objects.filter(parent_id__isnull=True).order_by('-date')
-	paginator = Paginator(drop_parents, 20)
+	paginator = Paginator(drop_parents, 5)
 	page = request.GET.get('page')
 	try:
 		paginator = paginator.page(page)
@@ -40,10 +40,23 @@ def ideas(request):
 	except EmptyPage:
 		paginator = paginator.page(paginator.num_pages)
 
+
+
 	latest = Drops.objects.order_by('-date')[:10]
+	context_dict = {'drop_parents': paginator, 'latest': latest }
 
+	uid = request.user
+	try:
+		profile = UserProfile.objects.get(user=uid)
+		context_dict['profile'] = profile
+	except:
+		pass
+	try:
+		mydrops = Drops.objects.filter(user=uid)	
+		context_dict['mine'] = mydrops
+	except:
+		pass
 
-	context_dict = {'drop_parents': paginator, 'latest': latest}
 	if request.method == 'POST':
 		form = DropsForm(data=request.POST)
 		if form.is_valid():

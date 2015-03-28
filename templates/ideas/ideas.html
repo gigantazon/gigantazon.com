@@ -1,29 +1,52 @@
 {% extends "ideas/base.html" %}
-
+{% load static %}
 
 {% block main %}
-<div class="row">
- <div class="col-md-6">
-
+{% if user.is_authenticated %}
+<div class="row vcenter">
+ <div class="col-md-1 col-md-offset-1">
+  <img class="img-responsive" src="/media/{{ profile.thumb }}" width="100%">
+ </div>
+ <div class="col-md-3">
+  <h3>{{ user.username }}</h3>
+  Joined: {{ user.date_joined|date:"M d Y"  }}
+ </div>
+ <div class="col-md-3 col-md-offset-1">
+  <h4>This is where we could put badges, etc.</h4>
  </div>
 </div>
+<hr style="background: #e5e5fe; height:1px">
+{% endif %}
+
 <div class="row">
  <div class="col-md-5 col-md-offset-1">
- 	<h3>Big Ideas</h3>
+ 	<h3>Top Ideas</h3>
   <ul class="list-unstyled">
 {% for drop in drop_parents %}
-	 <a href="view/{{ drop.id }}"><li class="default ">{{ drop.data|title|truncatechars:100 }}</li></a>
+	 <li class="default "><a href="view/{{ drop.id }}">{{ drop.data|title|truncatechars:100 }}</li></a>
 {% endfor %}
-	</ul>
-{% if idea_parents.has_next %}
-	<a href="?page={{ idea_parents.next_page_number }}">next</a>
+
+{% if drop_parents.has_next %}
+  <a href="?page={{ drop_parents.next_page_number }}"><span class="label label-info">Next<span></a>
 {% endif %}
+{% if drop_parents.has_previous %} 
+  <a href="?page={{ drop_parents.previous_page_number }}"><span class="label label-info">Prev</span></a>
+{% endif %}
+
+  </ul>
  </div>
  <div class="col-md-4 col-md-offset-1">
   <div class="row">
-    <div class="col-md-12">
-        <ul class="list-unstyled">
-          {% for r in latest %}
+    <div class="col-md-12" role="tabpanel">
+      <ul class="nav nav2 nav-tabs" role="tablist">
+        <li  class="active" role="presentation" ><a aria-controls="latest" data-toggle="tab"href="#latest">Latest</a></li>
+        <li role="presentation" ><a aria-controls="watch" data-toggle="tab" href="#watch">Watching</a></li>
+        <li role="presentation" ><a aria-controls="mine" data-toggle="tab" href="#mine">My Ideas</a></li>
+      </ul>
+      <div class="tab-content">
+        <div role="tabpanel1" class="tab-pane active" id="latest">
+          <ul class="list-unstyled">
+            {% for r in latest %}
            {% if r.drop_type == 'spark' %}
              <li class="default spark">{% if r.url %}<a href="{{ r.url }}">{% endif %}{{ r.data|truncatechars:100}}</a></p></li>
             {% elif r.drop_type == 'idea' %}
@@ -33,8 +56,28 @@
             {% else %}
     	       {{ pass }}
             {% endif %}
-          {% endfor %}
-        </ul>
+           {% endfor %}
+          </ul>
+        </div>
+        <div role="tabpanel1" class="tab-pane" id="watch">
+          {% if user.is_authenticated %}
+           You're watching:
+          {% else %}
+            You must be logged in
+          {% endif %}
+        </div>
+        <div role="tabpanel1" class="tab-pane" id="mine">
+          {% if user.is_authenticated %}
+           <ul class="list-unstyled">
+           {% for m in mine %}
+             <li>{{ m.data|truncatechars:70 }}</li>
+           {% endfor %}
+           </ul>
+          {% else %}
+            You must be logged in
+          {% endif %}
+        </div>          
+      </div>
     </div>
   </div>
  </div>

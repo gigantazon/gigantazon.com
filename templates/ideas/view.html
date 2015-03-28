@@ -146,6 +146,12 @@ $(document).ready(function(){
             if(d.drop_type==='spark') return "#fed3d3";
             if(d.drop_type==='action') return "#babafe";
           })
+          .on("click", function(d){
+            // console.log(d)
+            // $location.search(d,d.id);
+            if(d.origin===false) window.location.href="#" + d.id ;
+            else window.location.href="#"+ d.origin + "?d=" + d.id ;
+          })
           .call(force.drag);
     
       node.append("title")
