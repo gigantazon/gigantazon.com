@@ -58,22 +58,18 @@ def ideas(request):
 		pass
 
 	if request.method == 'POST':
-		form = DropsForm(data=request.POST)
-		if form.is_valid():
-			ideas = form.save(commit=False)
-			ideas.save()
-			return HttpResponseRedirect('/ideas/')
-		else:
-			print form.errors
-	
-	else:
-		uname = request.user.username
+		uid = request.user
+		user = User.objects.get(username=uid)
+		data = request.POST['data']
+		drop_type = 'idea'
+		user = request.user
+		d = Drops(data=data,user=user,drop_type=drop_type)
 		try:
-			u = User.objects.get(username=uname)
-			form = DropsForm(initial={'is_parent': True,'user': u.id})
-			context_dict['form'] = form
-		except:
-			pass
+			d.save()
+		except Exception, e:
+			raise
+
+
 		
 	return render_to_response('ideas/ideas.html', context_dict, context)
 
