@@ -84,6 +84,7 @@ class Drops(models.Model):
 	date = models.DateTimeField(auto_now=True)
 	parent_id = models.ForeignKey('self',null=True,blank=True)
 	origin_id = models.PositiveSmallIntegerField(max_length=10,default=0)
+	views = models.PositiveSmallIntegerField(max_length=50, default=0)
 
 	def __unicode__(self):
 		return self.data

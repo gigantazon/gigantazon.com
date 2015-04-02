@@ -31,7 +31,7 @@ class JSONResponse(HttpResponse):
 def ideas(request):
 	context = RequestContext(request)
 	drop_parents = Drops.objects.filter(parent_id__isnull=True).order_by('-date')
-	paginator = Paginator(drop_parents, 5)
+	paginator = Paginator(drop_parents, 20)
 	page = request.GET.get('page')
 	try:
 		paginator = paginator.page(page)
@@ -76,9 +76,23 @@ def ideas(request):
 def view_idea(request, idea_id):
 	context = RequestContext(request)
 	title = Drops.objects.get(pk=idea_id)
-	
-	context_dict = { 'title': title }
+	if title.parent_id:
+		children = Drops.objects.filter(parent_id=title.id).count()
+	else:
+		children = Drops.objects.filter(origin_id=idea_id).count()
 
+	views = title.views
+	views = views + 1
+	title.views = views
+	title.save()
+
+	context_dict = { 'title': title,'children': children }
+	uid = request.user
+	try:
+		profile = UserProfile.objects.get(user=uid)
+		context_dict['profile'] = profile
+	except:
+		pass
 	return render_to_response('ideas/view.html', context_dict, context)
 
 def get_idea_subs(request, idea_id):
@@ -163,7 +177,7 @@ def user_login(request):
 			return HttpResponseRedirect('/ideas/login/')
 
 	else:
-		return render_to_response('ideas/login.html', context)
+		return render_to_response('ideas/login.html', {'login_fail': "Invalid Credentials"},context)
 		
 def user_logout(request):
 	logout(request)
@@ -192,3 +206,18 @@ def profile(request):
 		return HttpResponseRedirect('/ideas/profile/')
 	return render_to_response('ideas/profile.html', context_dict, context)
 	
+
+def search(request):
+	context = RequestContext(request)
+	uid = request.user
+	if request.method == 'POST':
+		srch = request.POST['search']
+		ideas = Drops.objects.filter(Q(data__icontains=srch)).distinct('data')
+		
+		profile = UserProfile.objects.get(user=uid)
+
+		context_dict={'srch_term': srch, 'drops': ideas, 'profile': profile}
+
+		return render_to_response('ideas/search.html', context_dict, context)
+	else:
+		return HttpResponseRedirect('/ideas/')

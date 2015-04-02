@@ -62,7 +62,7 @@ $(document).ready(function(){
 
         <li><a href="/ideas">Home</a></li>
         <li style="width: 400px">
-       <form class="navbar-form navbar-left" role="search" action="" method="post" id="search"> {% csrf_token %}
+       <form class="navbar-form navbar-left" role="search" action="/ideas/search/" method="post" id="search"> {% csrf_token %}
         <div class="input-group">
          <input type="text" class="form-control" placeholder="Doesn't work yet" name="search" id="search">
          <input type="hidden" id="search-id">
@@ -84,7 +84,24 @@ $(document).ready(function(){
   <div class="row">
     <div class="" style="background: #7c7c7c; height:2px">
 </nav>
+{% if user.is_authenticated %}
+<div class="row vcenter">
+ <div class="col-md-1 col-md-offset-1">
+  <img class="img-responsive" src="/media/{{ profile.thumb }}" width="100%">
+ </div>
+ <div class="col-md-3">
+  <h3>{{ user.username }}</h3>
+  Joined: {{ user.date_joined|date:"M d Y"  }}
+ </div>
+ <div class="col-md-3"><br />
 
+ </div>
+ <div class="col-md-3">
+  <h4>This is where we could put badges, etc.</h4>
+ </div>
+</div>
+<hr style="background: #e5e5fe; height:1px">
+{% endif %}
 {% block main %}
 
 {% endblock %}
