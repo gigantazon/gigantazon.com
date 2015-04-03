@@ -11,37 +11,30 @@ $(document).ready(function(){
       url: url,
       success: function(data)
       {
-        
+        console.log(data)
         $.each(data, function(index, val) {
-          var url = "/ideas/view/is_parent/"+val.id
-          $.ajax({
-            type: "GET",
-            url: url,
-            success: function(subs)
-            {
-              if ( subs > 0 ) {
-                if ( val.drop_type === 'spark'){
-                  $('ul#spark_list').append("<li id='"+val.id+"'><a href='/ideas/view/"+val.id+"'>"+val.data+"</a></li>")
-                } else if ( val.drop_type === 'idea') {
-                  $('ul#idea_list').append("<li id='"+val.id+"'><a href='/ideas/view/"+val.id+"' class='parent'>"+val.data+"</a></li>")
-                } else if ( val.drop_type === 'action') {
-                  $('ul#spark_list').append("<li id='"+val.id+"'><a href='/ideas/view/"+val.id+"' class='parent'>"+val.data+"</a></li>")
-                }
-              } else {
-                if ( val.drop_type === 'spark'){
-                  $('ul#spark_list').append("<li id='"+val.id+"'>"+val.data+"</li>")
-                } else if ( val.drop_type === 'idea') {
-                  $('ul#idea_list').append("<li id='"+val.id+"'>"+val.data+"</li>")
-                } else if ( val.drop_type === 'action') {
-                  $('ul#spark_list').append("<li id='"+val.id+"'>"+val.data+"</li>")
-                }
+              
+              if ( val.drop_type === 'spark'){
+                  $('ul#spark_list').append("<li class='default' id='"+val.id+"'><a href='/ideas/view/"+val.id+"'>"+val.data+"</a></li>")
+              } else if ( val.drop_type === 'idea') {
+                  $('ul#idea_list').append("<li class='default' id='"+val.id+"'><a href='/ideas/view/"+val.id+"' class='parent'>"+val.data+"</a></li>")
+              } else  {
+                  $('ul#action_list').append("<li class='default' id='"+val.id+"'><a href='/ideas/view/"+val.id+"' class='parent'>"+val.data+"</a></li>")
               }
-            }
-          })
+             
 
         })
       }
     })
+  $('select#type').on('change', function() {
+    var type = this.value;
+    if (type === 'spark') {
+      $('select#type').after("<input type='text' name='url' class='form-control' placeholder='Enter URL' style='max-width: 80%'>")
+    } else {
+      $('input[name=url]').remove()
+    }
+
+  })
  
  });   
 </script>
@@ -62,6 +55,7 @@ $(document).ready(function(){
     <li>Views: {{ title.views }}</li>
     <li>Replies: {{ children }}</li>
   </ul>
+  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#ideaModal">Add Reply</button>
  </div>
  <div class="col-md-5" id="svg" style="min-height: 250px; background: #e5e5e5; margin-bottom: 20px">
  </div>
@@ -188,6 +182,32 @@ $(document).ready(function(){
 </div>
 
 </div><!-- container -->
-
+<div class="modal fade" id="ideaModal" tabindex="-1" role="dialog" aria-labelledby="ideaModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="ideaModalLabel">Add New Idea</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form" id="add_idea" method="post" action="/ideas/">
+          {% csrf_token %}
+          <input type="hidden" name="parent" value="{{ title.id }}">
+          <input type="hidden" name="origin" value=" {{ title.origin_id }}">
+          <select class="form-control" id="type" name="type" style="width: 80%">
+            <option>--Select Type--</option>
+            <option value="spark">Spark</option>
+            <option value="idea">Idea</option>
+            <option value="action">Action</option>
+          </select>
+          <div class="form-group">
+            <textarea clas="form-control" rows="3" name="data" id="textIdea" placeholder="Add your idea" style="max-width: 80%; width: 80%"> </textarea>
+          </div>
+          <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
 {% endblock %}

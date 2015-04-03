@@ -61,21 +61,36 @@ def ideas(request):
 		uid = request.user
 		user = User.objects.get(username=uid)
 		data = request.POST['data']
-		drop_type = 'idea'
+		drop_type = request.POST.get('type', 'idea')
+		url = request.POST.get('url', '')
 		user = request.user
-		d = Drops(data=data,user=user,drop_type=drop_type)
+		parent = request.POST.get('parent', '')
+		origin = request.POST.get('origin', '')
+		if origin == " 0":
+			o = parent
+		else:
+			o = origin
+		if parent:
+			p = Drops.objects.get(id=parent)
+		else:
+			p = ''
+		d = Drops(data=data,user=user,drop_type=drop_type,url=url, parent_id=p,origin_id=o)
 		try:
 			d.save()
 		except Exception, e:
 			raise
 
-
+		return HttpResponseRedirect('/ideas/view/%d/' % d.id)
 		
 	return render_to_response('ideas/ideas.html', context_dict, context)
 
 def view_idea(request, idea_id):
 	context = RequestContext(request)
-	title = Drops.objects.get(pk=idea_id)
+	try:
+		title = Drops.objects.get(pk=idea_id)
+	except:
+		raise	Http404("Idea does not exist")
+
 	if title.parent_id:
 		children = Drops.objects.filter(parent_id=title.id).count()
 	else:
