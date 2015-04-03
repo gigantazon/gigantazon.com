@@ -70,11 +70,13 @@ def ideas(request):
 			o = parent
 		else:
 			o = origin
+
 		if parent:
 			p = Drops.objects.get(id=parent)
+			d = Drops(data=data,user=user,drop_type=drop_type,url=url, parent_id=p,origin_id=o)
 		else:
-			p = ''
-		d = Drops(data=data,user=user,drop_type=drop_type,url=url, parent_id=p,origin_id=o)
+			d = Drops(data=data,user=user,drop_type=drop_type)
+		
 		try:
 			d.save()
 		except Exception, e:

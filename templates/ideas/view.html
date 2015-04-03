@@ -51,6 +51,7 @@ $(document).ready(function(){
  <div class="col-md-3 col-md-offset-1">
   <ul class="list-unstyled">
     <li><h2>{{ title | title }}</h2></li>
+    {% if title.url %} <a target="_new" href="{{ title.url}}">{{ title.url }}</a>{% endif%}
     <li>Date submitted: {{ title.date|date }}</li>
     <li>Views: {{ title.views }}</li>
     <li>Replies: {{ children }}</li>
