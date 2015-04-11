@@ -82,6 +82,7 @@ class Drops(models.Model):
 	drop_type = models.CharField(max_length=15)
 	user = models.ForeignKey(User)
 	date = models.DateTimeField(auto_now_add=True)
+	dueDate = models.DateTimeField(null=True,blank=True)
 	parent_id = models.ForeignKey('self',null=True,blank=True)
 	origin_id = models.PositiveSmallIntegerField(max_length=10,default=0)
 	views = models.PositiveSmallIntegerField(max_length=50, default=0)

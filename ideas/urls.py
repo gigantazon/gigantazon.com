@@ -1,4 +1,5 @@
 from django.conf.urls import patterns, url
+from django.views.generic import TemplateView
 from ideas import views
 
 urlpatterns = patterns('',
@@ -12,6 +13,7 @@ urlpatterns = patterns('',
         url(r'^view/map/(?P<idea_id>\w+)/$', views.d3_map, name='d3_map'),
         url(r'^profile/$', views.profile, name='profile'),
         url(r'^search/$', views.search, name='search'),
+        url(r'^faq/$', TemplateView.as_view(template_name="ideas/faq.html")),
         url(r'^password/reset/$', 
          'django.contrib.auth.views.password_reset', 
          {'post_reset_redirect' : '/ideas/password/reset/done/', 

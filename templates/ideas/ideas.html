@@ -6,7 +6,7 @@
 
 <div class="row">
  <div class="col-md-5 col-md-offset-1">
-  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#ideaModal">Add Idea</button><br />
+  {% if user.is_authenticated %}<button type="button" class="btn btn-default" data-toggle="modal" data-target="#ideaModal">Add Idea</button><br />{% endif %}
  	<h3>Top Ideas</h3>
   <ul class="list-unstyled">
 {% for drop in drop_parents %}
@@ -37,9 +37,9 @@
            {% if r.drop_type == 'spark' %}
              <li class="default spark">{% if r.url %}<a href="{{ r.url }}">{% endif %}{{ r.data|truncatechars:100}}</a></p></li>
             {% elif r.drop_type == 'idea' %}
-    	       <li class="default idea"><a href="view/{{ r.url }}">{{ r.data|truncatechars:100 }}</a></p></li>
+    	       <li class="default idea"><a href="view/{{ r.id }}">{{ r.data|truncatechars:100 }}</a></p></li>
             {% elif r.drop_type == 'action' %}
-    	       <li class="default action"><a href="view/{{ r.idea_id }}">{{ r.data|truncatechars:100 }}</a></p></li>
+    	       <li class="default action"><a href="view/{{ r.id }}">{{ r.data|truncatechars:100 }}</a></p></li>
             {% else %}
     	       {{ pass }}
             {% endif %}

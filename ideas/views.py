@@ -16,6 +16,7 @@ from django.db.models import Q
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from ideas.serializers import DropsSerializer, D3Serializer
+import datetime
 # Create your views here.
 
 def index(request):
@@ -58,12 +59,17 @@ def ideas(request):
 		pass
 
 	if request.method == 'POST':
+		kwargs = { }
 		uid = request.user
-		user = User.objects.get(username=uid)
-		data = request.POST['data']
-		drop_type = request.POST.get('type', 'idea')
-		url = request.POST.get('url', '')
-		user = request.user
+		kwargs['user'] = User.objects.get(username=uid)
+		kwargs['data'] = request.POST['data']
+		if request.POST.get('action-date'):
+			duedate = request.POST.get('action-date')
+			d = datetime.datetime.strptime(duedate, '%Y-%m-%dT%H:%M')
+			kwargs['dueDate'] = d
+		kwargs['drop_type'] = request.POST.get('type', 'idea')
+		kwargs['url'] = request.POST.get('url', '')
+		kwargs['user'] = uid
 		parent = request.POST.get('parent', '')
 		origin = request.POST.get('origin', '')
 		if origin == " 0":
@@ -73,9 +79,9 @@ def ideas(request):
 
 		if parent:
 			p = Drops.objects.get(id=parent)
-			d = Drops(data=data,user=user,drop_type=drop_type,url=url, parent_id=p,origin_id=o)
-		else:
-			d = Drops(data=data,user=user,drop_type=drop_type)
+			kwargs['parent_id'] = p
+			kwargs['origin_id'] = o
+		d = Drops(**kwargs)
 		
 		try:
 			d.save()

@@ -27,15 +27,50 @@ $(document).ready(function(){
       }
     })
   $('select#type').on('change', function() {
+    $('.control-label').remove();
     var type = this.value;
     if (type === 'spark') {
-      $('select#type').after("<input type='text' name='url' class='form-control' placeholder='Enter URL' style='max-width: 80%'>")
-    } else {
-      $('input[name=url]').remove()
+      $('div#action-group').remove()
+      $('select#type').after("<div class='form-group' id='url-group' style='margin-top: 5px'><input type='text' name='url' class='form-control' placeholder='Enter URL' style='max-width: 80%'></div>")
+    } else if (type === 'action') {
+      $('div#url-group').remove()
+      $('select#type').after("<div class='form-group' id='action-group' style='margin-top: 5px'><label for='action-date'>Due Date </label><br /><input type='datetime-local' id='action-date' name='action-date' class='frm-control' style='max-width: 80%'></div>")
+    } else if (type === 'idea') {
+      $('div#action-group').remove();
+      $('div#url-group').remove();
     }
 
   })
- 
+  $('#add_idea').submit(function(e) {
+    $('.control-label').remove();
+    var idea_type = $('#type').val()
+    if ( !$.trim($('textarea[name=data]').val()) ) {
+      $("div#textarea-idea").addClass('has-error');
+      $("textarea#textIdea").before("<label class='control-label' for='textIdea'>Please enter your idea</label>")
+    } else {
+      if (idea_type === 'spark') {
+        var url = $('input[name=url]').val()
+        if ( !url.match(/^http([s]?):\/\/.*/)) {
+          $('div#url-group').addClass('has-error');
+          $('input[name=url]').before("<label class='control-label' for='url-group'>Valid URL Required</label>")
+        } else {
+          $('#add_idea').submit();
+        }
+
+      } else if ( idea_type === 'action' ) {
+          var dueDate = $('input[name=action-date]').val()
+          if ( dueDate != '' ) {
+            $('#add_idea').submit();
+          } else {
+            $('div#action-group').addClass('has-error');
+            $('input[name=action-date').before("<label class='control-label' for='action-group'>Valid Date Required&nbsp;&nbsp; </label>")
+          }
+      } else if ( idea_type === 'idea' ) {
+        $('#add_idea').submit();
+      }
+    }
+  e.preventDefault();
+  })
  });   
 </script>
 <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
@@ -56,9 +91,9 @@ $(document).ready(function(){
     <li>Views: {{ title.views }}</li>
     <li>Replies: {{ children }}</li>
   </ul>
-  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#ideaModal">Add Reply</button>
+  {% if user.is_authenticated %}<button type="button" class="btn btn-default" data-toggle="modal" data-target="#ideaModal">Add Reply</button>{% endif %}
  </div>
- <div class="col-md-5" id="svg" style="min-height: 250px; background: #e5e5e5; margin-bottom: 20px">
+ <div class="col-md-5" id="svg" style="min-height: 250px; background: #e5e5e5; margin-bottom: 20px; border: 1px solid black">
  </div>
 </div>
 <script type="text/javascript">
@@ -191,17 +226,19 @@ $(document).ready(function(){
         <h4 class="modal-title" id="ideaModalLabel">Add New Idea</h4>
       </div>
       <div class="modal-body">
-        <form class="form" id="add_idea" method="post" action="/ideas/">
+        <form class="form form-group" id="add_idea" method="post" action="/ideas/">
           {% csrf_token %}
           <input type="hidden" name="parent" value="{{ title.id }}">
           <input type="hidden" name="origin" value=" {{ title.origin_id }}">
-          <select class="form-control" id="type" name="type" style="width: 80%">
-            <option>--Select Type--</option>
-            <option value="spark">Spark</option>
-            <option value="idea">Idea</option>
-            <option value="action">Action</option>
-          </select>
           <div class="form-group">
+           <select class="form-control" id="type" name="type" style="width: 80%">
+             <option>--Select Type--</option>
+             <option value="spark">Spark</option>
+             <option value="idea">Idea</option>
+             <option value="action">Action</option>
+           </select>
+          </div>
+          <div class="form-group" id="textarea-idea" style="margin-top: 5px">
             <textarea clas="form-control" rows="3" name="data" id="textIdea" placeholder="Add your idea" style="max-width: 80%; width: 80%"> </textarea>
           </div>
           <button type="submit" class="btn btn-default">Submit</button>
