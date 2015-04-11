@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from ideas.models import Drops, UserProfile, Comments
+from ideas.models import Drops, UserProfile, Comments, Watch
 from ideas.forms import DropsForm, UserForm, UserProfileForm, CommentForm
 from django.core.paginator import Paginator,EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
@@ -53,8 +53,10 @@ def ideas(request):
 	except:
 		pass
 	try:
-		mydrops = Drops.objects.filter(user=uid)	
+		mydrops = Drops.objects.filter(user=uid)[:20]	
 		context_dict['mine'] = mydrops
+		watching = Watch.objects.filter(user=uid,active=True)[:20]
+		context_dict['watching'] = watching
 	except:
 		pass
 
@@ -99,6 +101,7 @@ def view_idea(request, idea_id):
 	except:
 		raise	Http404("Idea does not exist")
 
+
 	if title.parent_id:
 		children = Drops.objects.filter(parent_id=title.id).count()
 	else:
@@ -114,8 +117,13 @@ def view_idea(request, idea_id):
 	try:
 		profile = UserProfile.objects.get(user=uid)
 		context_dict['profile'] = profile
+		u = User.objects.get(username=uid)
+		watching = Watch.objects.filter(drop=title,user=u,active=True)
 	except:
 		pass
+	if watching:
+		context_dict['watching'] = True
+
 	return render_to_response('ideas/view.html', context_dict, context)
 
 def get_idea_subs(request, idea_id):
@@ -244,3 +252,48 @@ def search(request):
 		return render_to_response('ideas/search.html', context_dict, context)
 	else:
 		return HttpResponseRedirect('/ideas/')
+
+def watch(request, drop_id):
+	context = RequestContext(request)
+	if request.method == 'GET':
+		uid = request.user
+		try:
+			u = User.objects.get(username=uid)
+			d = Drops.objects.get(id=drop_id)
+		except:
+			return HttpResponse("Failed")
+		try:
+			w = Watch.objects.get(user=u,drop=d)
+			if w.active == False:
+				w.active = True
+				w.save()
+				return HttpResponse("OK")
+			else:
+				return HttpResponse("Exists")
+		except:
+			w = Watch(user=u,drop=d)
+			try: 
+				w.save()
+				return HttpResponse("OK")
+			except:
+				return HttpResponse("Failed")
+
+
+def watch_remove(request, drop_id):
+	context = RequestContext(request)
+	uid = request.user
+	if request.method == 'GET':
+		u = User.objects.get(username=uid)
+		d = Drops.objects.get(id=drop_id)
+		w = Watch.objects.get(user=u,drop=d)
+		w.active = False
+		try: 
+			w.save()
+			return HttpResponse("OK")
+		except:
+			return HttpResponse("Failed")
+
+
+
+
+

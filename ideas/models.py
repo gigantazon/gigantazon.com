@@ -100,3 +100,12 @@ class Comments(models.Model):
 
 		def __unicode__(self):
 			return self.comment
+
+class Watch(models.Model):
+	user = models.ForeignKey(User)
+	drop = models.ForeignKey(Drops)
+	date = models.DateTimeField(auto_now_add=True)
+	active = models.BooleanField(default=True)
+
+	def __unicode__(self):
+		return self.drop.data

@@ -71,6 +71,40 @@ $(document).ready(function(){
     }
   e.preventDefault();
   })
+
+  $("#watch").click(function () {
+    var idea_id = {{ title.id }}
+    var url = "/ideas/watch/"+idea_id
+    $.ajax({
+      type: "GET",
+      url: url,
+      success: function(data)
+      {
+        if ( data === 'OK' ) {
+          $("#watch").attr("class", "btn btn-success").html("Watching")
+        } else {
+          $("#watch").attr("class", "btn btn-danger").html("Failed")
+        }
+      }
+    })
+  })
+  $("#unwatch").click(function() {
+    var idea_id = {{ title.id }}
+    var url = "/ideas/unwatch/"+idea_id
+    $.ajax({
+      type: "GET",
+      url: url,
+      success: function(data)
+      {
+        if ( data === 'OK' ) {
+          $("#unwatch").attr("class", "btn btn-success").html("Unwatched")
+        } else {
+          $("unwatch").attr("class", "btn btn-danger").html("Failed")
+        }
+      }
+    })
+  })
+
  });   
 </script>
 <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
@@ -91,7 +125,8 @@ $(document).ready(function(){
     <li>Views: {{ title.views }}</li>
     <li>Replies: {{ children }}</li>
   </ul>
-  {% if user.is_authenticated %}<button type="button" class="btn btn-default" data-toggle="modal" data-target="#ideaModal">Add Reply</button>{% endif %}
+  {% if user.is_authenticated %}<button type="button" class="btn btn-default" data-toggle="modal" data-target="#ideaModal">Add Reply</button> 
+  {% if watching == True %}<button type="button" id="unwatch" class="btn btn-default">UnWatch</button>{% else %}<button type="button" id="watch" class="btn btn-default">Watch</button>{% endif %}{% endif %}
  </div>
  <div class="col-md-5" id="svg" style="min-height: 250px; background: #e5e5e5; margin-bottom: 20px; border: 1px solid black">
  </div>
