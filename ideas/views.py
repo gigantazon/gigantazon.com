@@ -17,11 +17,16 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from ideas.serializers import DropsSerializer, D3Serializer
 import datetime
+import string,random, operator
 # Create your views here.
 
+def gen_small(size=6, chars=string.ascii_letters + string.digits):
+	return ''.join(random.choice(chars) for _ in range(size))
+
 def index(request):
-	context = RequestContext(request)
-    	return  render_to_response('ideas/index.html', context)
+        context = RequestContext(request)
+        return  render_to_response('ideas/index.html', context)
+
 
 class JSONResponse(HttpResponse):
 	def __init__(self, data, **kwargs):
@@ -34,6 +39,10 @@ def ideas(request):
 	drop_parents = Drops.objects.filter(parent_id__isnull=True).order_by('-date')
 	paginator = Paginator(drop_parents, 20)
 	page = request.GET.get('page')
+	latestpage = request.GET.get('latest')
+	mypage = request.GET.get('mypage')
+	watchpage = request.GET.get('watchpage')
+
 	try:
 		paginator = paginator.page(page)
 	except PageNotAnInteger:
@@ -41,10 +50,16 @@ def ideas(request):
 	except EmptyPage:
 		paginator = paginator.page(paginator.num_pages)
 
+	latest = Drops.objects.order_by('-date')[:100]
+	latest_page = Paginator(latest, 20)
+	try:
+		latest_page = latest_page.page(latestpage)
+	except PageNotAnInteger:
+		latest_page = latest_page.page(1)
+	except EmptyPage:
+		latest_page = latest_page.page(paginator.num_pages)
 
-
-	latest = Drops.objects.order_by('-date')[:10]
-	context_dict = {'drop_parents': paginator, 'latest': latest }
+	context_dict = {'drop_parents': paginator, 'latest': latest_page }
 
 	uid = request.user
 	try:
@@ -53,9 +68,18 @@ def ideas(request):
 	except:
 		pass
 	try:
-		mydrops = Drops.objects.filter(user=uid)[:20]	
-		context_dict['mine'] = mydrops
-		watching = Watch.objects.filter(user=uid,active=True)[:20]
+		mydrops = Drops.objects.filter(user=uid)
+		my_page = Paginator(mydrops, 20)	
+		try:
+			my_page = my_page.page(mypage)
+		except PageNotAnInteger:
+			my_page = my_page.page(1)
+		except EmptyPage:
+			my_page = my_page.page(paginator.num_pages)
+
+		context_dict['mine'] = my_page
+		watching = Watch.objects.filter(user=uid,active=True)
+		watch_page = Paginator(watching, 20)
 		context_dict['watching'] = watching
 	except:
 		pass
@@ -65,6 +89,7 @@ def ideas(request):
 		uid = request.user
 		kwargs['user'] = User.objects.get(username=uid)
 		kwargs['data'] = request.POST['data']
+		kwargs['short'] = gen_small()
 		if request.POST.get('action-date'):
 			duedate = request.POST.get('action-date')
 			d = datetime.datetime.strptime(duedate, '%Y-%m-%dT%H:%M')
@@ -107,22 +132,30 @@ def view_idea(request, idea_id):
 	else:
 		children = Drops.objects.filter(origin_id=idea_id).count()
 
+	if title.origin_id:
+		origin = Drops.objects.get(id=title.origin_id)
+	else:
+		origin = ''
+
 	views = title.views
 	views = views + 1
 	title.views = views
 	title.save()
 
-	context_dict = { 'title': title,'children': children }
+	context_dict = { 'title': title,'children': children, 'origin': origin }
 	uid = request.user
 	try:
+		submitter = User.objects.get(username=title.user)
+		context_dict['submitter'] = submitter
 		profile = UserProfile.objects.get(user=uid)
 		context_dict['profile'] = profile
 		u = User.objects.get(username=uid)
 		watching = Watch.objects.filter(drop=title,user=u,active=True)
+		if watching:
+			context_dict['watching'] = True
 	except:
 		pass
-	if watching:
-		context_dict['watching'] = True
+
 
 	return render_to_response('ideas/view.html', context_dict, context)
 

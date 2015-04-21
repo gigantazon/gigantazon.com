@@ -2,7 +2,19 @@
 {% load static %}
 
 {% block main %}
-
+<script>
+$(document).ready(function () {
+  var loc = document.URL.indexOf('mypage')
+  console.log(loc)
+  if (document.URL.indexOf('mypage') != -1 ) {
+    $('a[href=#mine]').tab('show') 
+  } else if (document.URL.indexOf('watchpage') != -1 ) {
+    $('a[href=#watch]').tab('show') 
+  } else {
+    $('a[href=#latest]').tab('show') 
+  }
+})
+</script>
 
 <div class="row">
  <div class="col-md-5 col-md-offset-1">
@@ -12,13 +24,13 @@
 {% for drop in drop_parents %}
 	 <li class="default "><a href="view/{{ drop.id }}">{{ drop.data|title|truncatechars:100 }}</li></a>
 {% endfor %}
-
-{% if drop_parents.has_next %}
-  <a href="?page={{ drop_parents.next_page_number }}"><span class="label label-info">Next<span></a>
-{% endif %}
 {% if drop_parents.has_previous %} 
   <a href="?page={{ drop_parents.previous_page_number }}"><span class="label label-info">Prev</span></a>
 {% endif %}
+{% if drop_parents.has_next %}
+  <a href="?page={{ drop_parents.next_page_number }}"><span class="label label-info">Next<span></a>
+{% endif %}
+
 
   </ul>
  </div>
@@ -45,6 +57,12 @@
             {% endif %}
            {% endfor %}
           </ul>
+          {% if latest.has_next %}
+             <a href="?latest={{ latest.next_page_number }}"><span class="label label-default">Next</span></a>
+          {% endif %}
+          {% if latest.has_previous %}
+             <a href="?latest={{ latest.previous_page_number }}"><span class="label label-default">Prev</span></a>
+          {% endif %}
         </div>
         <div role="tabpanel1" class="tab-pane" id="watch">
           {% if user.is_authenticated %}
@@ -66,9 +84,22 @@
           {% if user.is_authenticated %}
            <ul class="list-unstyled">
            {% for m in mine %}
-             <li>{{ m.data|truncatechars:70 }}</li>
+            {% if m.drop_type == 'spark' %}
+             <li class="default spark"><a href="view/{{m.id}}">{{ m.data|truncatechars:70 }}</a></li>
+            {% elif m.drop_type == 'idea' %}
+             <li class="default idea"><a href="view/{{m.id}}">{{ m.data|truncatechars:70 }}</a></li>
+            {% elif m.drop_type == 'action' %}
+             <li class="default action"><a href="view/{{m.id}}">{{ m.data|truncatechars:70 }}</a></li>
+            {% endif %}
            {% endfor %}
            </ul>
+           {% if mine.has_previous %}
+             <a href="?mypage={{ mine.previous_page_number }}"><span class="label label-default">Prev</span></a>
+           {% endif %}
+           {% if mine.has_next %}
+             <a href="?mypage={{ mine.next_page_number }}"><span class="label label-default">Next</span></a>
+           {% endif %}
+
           {% else %}
             You must be logged in
           {% endif %}
@@ -90,7 +121,7 @@
         <form class="form" id="add_idea" method="post" action="/ideas/">
           {% csrf_token %}
           <div class="form-group">
-            <textarea clas="form-control" rows="3" name="data" id="textIdea" placeholder="Add your idea" style="max-width: 80%; width: 80%"> </textarea>
+            <textarea maxlength="250" class="form-control" rows="3" name="data" id="textIdea" placeholder="Add your idea" style="max-width: 80%; width: 80%"> </textarea>
           </div>
           <button type="submit" class="btn btn-default">Submit</button>
         </form>

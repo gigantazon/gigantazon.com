@@ -86,6 +86,7 @@ class Drops(models.Model):
 	parent_id = models.ForeignKey('self',null=True,blank=True)
 	origin_id = models.PositiveSmallIntegerField(max_length=10,default=0)
 	views = models.PositiveSmallIntegerField(max_length=50, default=0)
+	short = models.CharField(max_length=250,blank=True,null=True,unique=True)
 
 	def __unicode__(self):
 		return self.data
