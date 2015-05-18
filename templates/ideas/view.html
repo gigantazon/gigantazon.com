@@ -3,6 +3,10 @@
 {% block head %}
 <script>
 $(document).ready(function(){
+
+  $('input[name=website]').val("http://");
+
+
   var idea_id = {{ title.id }}
 
   var url = "/ideas/view/subs/"+idea_id

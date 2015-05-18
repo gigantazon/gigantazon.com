@@ -1,6 +1,11 @@
 {% extends "ideas/base.html" %}
-
-
+{% block head %}
+<script>
+$(document).ready(function() {
+  $('input[name=website]').val("http://");
+})
+</script>
+{% endblock %}
 {% block main %}
 <div class="row" style="min-height: 500px">
  <div class="col-md-5 col-md-offset-1">
