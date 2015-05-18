@@ -3,13 +3,15 @@ We highly recommend you use SASS and write your custom styles in sass/_custom.sc
 However, this blank file is available if you prefer
 */
 
-.idea { background-color: #fefee5;padding: 5px }
-.spark { background-color: #fee5e5; padding: 5px;}
-.action { background-color: #e5e5fe; padding: 5px}
+.idea { background-color: #fefee5;padding: 5px; margin-bottom: 3px; }
+.spark { background-color: #fee5e5; padding: 5px;margin-bottom: 3px;}
+.action { background-color: #e5e5fe; padding: 5px; margin-bottom: 3px;}
 
-li.idea, .alert.idea { background: #fefee5; border: 1px solid #feffd2; color: #255a32; }
+li.idea, .alert.idea { background: #fefee5; border: 1px solid #ebebaf; color: #255a32; }
 li.spark, .alert.spark { background: #fee5e5; border: 1px solid #fbd3d3; color: #255a32; }
 li.action, .alert.action { background: #e5e5fe; border: 1px solid #d4d4ff; color: #255a32; }
+
+li.top { background: #d5d5d5; border: 1px solid #a4a4a4; color: #6a6a6a;}
 
 .navbar-dark {
   background-color: #424242;
@@ -59,8 +61,35 @@ li.default > a {
   color: #6a6a6a;
 }
 
+a.top-ideas {
+  color: #000;
+  margin-bottom: 2px;
+}
+
+a.default { color: #6a6a6a;}
+
 .nav2 > li > a:hover,
 .nav2 > li > a:focus {
   text-decoration: none;
   background-color: #fff;
+}
+
+
+.footer {
+  margin-top: 100px;
+  padding-top: 50px;
+  height: 300px;
+  width: 100%;
+  background: #e1e1e1;
+}
+
+
+.top-ideas {
+  position: relative;
+  display: block;
+  padding: 10px 15px;
+  /* margin-bottom: -1px; */
+  margin-bottom: 3px;
+  background-color: #efefef;
+  
 }

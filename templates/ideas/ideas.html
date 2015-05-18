@@ -18,11 +18,11 @@ $(document).ready(function () {
 
 <div class="row">
  <div class="col-md-5 col-md-offset-1">
-  {% if user.is_authenticated %}<button type="button" class="btn btn-default" data-toggle="modal" data-target="#ideaModal">Add Idea</button><br />{% endif %}
+  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#ideaModal">Add Idea</button><br />
  	<h3>Top Ideas</h3>
-  <ul class="list-unstyled">
+  <ul class="list-group">
 {% for drop in drop_parents %}
-	 <li class="default "><a href="view/{{ drop.id }}">{{ drop.data|title|truncatechars:100 }}</li></a>
+	 <a href="view/{{ drop.id }}" class="default"><li class="top-ideas">{{ drop.data|title|truncatechars:100 }}</li></a>
 {% endfor %}
 {% if drop_parents.has_previous %} 
   <a href="?page={{ drop_parents.previous_page_number }}"><span class="label label-info">Prev</span></a>
@@ -34,7 +34,7 @@ $(document).ready(function () {
 
   </ul>
  </div>
- <div class="col-md-4 col-md-offset-1">
+ <div class="col-md-5 col-md-offset-0">
   <div class="row">
     <div class="col-md-12" role="tabpanel">
       <ul class="nav nav2 nav-tabs" role="tablist">
@@ -115,6 +115,7 @@ $(document).ready(function () {
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        {% if user.is_authenticated %}
         <h4 class="modal-title" id="ideaModalLabel">Add New Idea</h4>
       </div>
       <div class="modal-body">
@@ -125,6 +126,43 @@ $(document).ready(function () {
           </div>
           <button type="submit" class="btn btn-default">Submit</button>
         </form>
+      </div>
+       {% else %}
+       <h4>Please Register</h4>
+      </div>
+      <div class="modal-body">
+         <form id="user_form" method="post" action="/ideas/register/" enctype="multipart/form-data">
+          {% csrf_token %}
+           {% for field in user_form %}
+              {{ field.errors }}
+              <div class="form-group">
+               <div class="md-col-2">
+                {{ field.name.capitalize }}
+               </div>
+               <div class="md-col-4">
+                {{ field }}
+               </div>
+              </div>
+           {% endfor %}
+
+           {% for field in profile_form %}
+            {{ field.errors }}
+            <div class="form-group">
+             <div class="md-col-2">
+              {{ field.name.capitalize }}
+             </div>
+             <div class="md-col-4">
+              {{ field }}
+             </div>
+            </div>
+           {% endfor %}
+            <div class="form-group">
+             <div class="md-col-4">
+              <div class="small primary pretty button"><input type="submit" name="submit" value="Register"></a></div>
+             </div>
+            </div>
+         </form>
+        {% endif %}
       </div>
     </div>
   </div>

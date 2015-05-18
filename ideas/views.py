@@ -18,6 +18,7 @@ from rest_framework.parsers import JSONParser
 from ideas.serializers import DropsSerializer, D3Serializer
 import datetime
 import string,random, operator
+from django.core.mail import send_mail
 # Create your views here.
 
 def gen_small(size=6, chars=string.ascii_letters + string.digits):
@@ -59,7 +60,10 @@ def ideas(request):
 	except EmptyPage:
 		latest_page = latest_page.page(paginator.num_pages)
 
-	context_dict = {'drop_parents': paginator, 'latest': latest_page }
+	user_form = UserForm()
+	profile_form = UserProfileForm()
+
+	context_dict = {'drop_parents': paginator, 'latest': latest_page, 'user_form': user_form, 'profile_form': profile_form }
 
 	uid = request.user
 	try:
@@ -142,7 +146,11 @@ def view_idea(request, idea_id):
 	title.views = views
 	title.save()
 
-	context_dict = { 'title': title,'children': children, 'origin': origin }
+
+	user_form = UserForm()
+	profile_form = UserProfileForm()
+
+	context_dict = { 'title': title,'children': children, 'origin': origin, 'profile_form': profile_form, 'user_form': user_form }
 	uid = request.user
 	try:
 		submitter = User.objects.get(username=title.user)
@@ -327,6 +335,19 @@ def watch_remove(request, drop_id):
 			return HttpResponse("Failed")
 
 
-
+def report(request):
+	context = RequestContext(request)
+	if request.method == 'POST':
+		title = request.POST['drop_title']
+		drop_id = request.POST['drop_id']
+		subject = "Drop reported: ID: %s" % drop_id
+		message = "The drop '%s' has been reported by a user for ToS violation" % title
+		recipients = ['matt.iavarone@gmail.com']
+		sender = 'admin@gigantazon.com'
+		send_mail(subject, message, sender, recipients)
+		context_dict={'title': title, 'id': drop_id}
+		return render_to_response('ideas/report.html', context_dict, context)
+	else:
+		return HttpResponseRedirect('/ideas/')
 
 

@@ -129,12 +129,12 @@ $(document).ready(function(){
     {% if title.url %} <a target="_new" href="{{ title.url}}">{{ title.url }}</a>{% endif%}
     <li>Link: <a href="http://gzon.co/{{title.short}}">gzon.co/{{title.short }}</a></li>
     <li>Date submitted: {{ title.date|date }}</li>
-    <li>By: {{ submitter }}</li>
     <li>Views: {{ title.views }}</li>
     <li>Replies: {{ children }}</li>
   </ul>
-  {% if user.is_authenticated %}<button type="button" class="btn btn-default" data-toggle="modal" data-target="#ideaModal">Add Reply</button> 
-  {% if watching == True %}<button type="button" id="unwatch" class="btn btn-default">UnWatch</button>{% else %}<button type="button" id="watch" class="btn btn-default">Watch</button>{% endif %}{% endif %}
+  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#ideaModal">Add Reply</button> 
+  {% if user.is_authenticated %}{% if watching == True %}<button type="button" id="unwatch" class="btn btn-default">UnWatch</button>{% else %}<button type="button" id="watch" class="btn btn-default">Watch</button>{% endif %}{% endif %}
+  <a id="report" href="#" data-toggle="modal" data-target="#reportModal">Report</a>
  </div>
  <div class="col-md-5" id="svg" style="min-height: 250px; background: #e5e5e5; margin-bottom: 20px; border: 1px solid black">
  </div>
@@ -266,6 +266,7 @@ $(document).ready(function(){
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      {% if user.is_authenticated %}
         <h4 class="modal-title" id="ideaModalLabel">Add New Idea</h4>
       </div>
       <div class="modal-body">
@@ -286,9 +287,67 @@ $(document).ready(function(){
           </div>
           <button type="submit" class="btn btn-default">Submit</button>
         </form>
+      {% else %}
+       <h4 class="modal-title" id="ideaModalLabel">Please Register</h4>
+      </div>
+      <div class="modal-body">
+        <form id="user_form" method="post" action="/ideas/register/" enctype="multipart/form-data">
+          {% csrf_token %}
+           {% for field in user_form %}
+              {{ field.errors }}
+              <div class="form-group">
+               <div class="md-col-2">
+                {{ field.name.capitalize }}
+               </div>
+               <div class="md-col-4">
+                {{ field }}
+               </div>
+              </div>
+           {% endfor %}
+
+           {% for field in profile_form %}
+            {{ field.errors }}
+            <div class="form-group">
+             <div class="md-col-2">
+              {{ field.name.capitalize }}
+             </div>
+             <div class="md-col-4">
+              {{ field }}
+             </div>
+            </div>
+           {% endfor %}
+            <div class="form-group">
+             <div class="md-col-4">
+              <div class="small primary pretty button"><input type="submit" name="submit" value="Register"></a></div>
+             </div>
+            </div>
+         </form>
+       </div>
+      {% endif %}
       </div>
     </div>
   </div>
 </div>
-
+<div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="reportModalLabel">Report Drop</h4><br />
+        <h5>{{ title }}</h5>
+      </div>
+      <div class="modal-body">
+         <h5>This will report this Drop to the site admins for violation of our Terms of Service.  Please click the Report button below to submit this request.</h5>
+         <form class="form form-group" id="report_drop" method="post" action="/ideas/report/">
+           {% csrf_token %}
+           <input type="hidden" name="drop_id" value="{{ title.id }}">
+           <input type="hidden" name="drop_title" value="{{ title }}">
+           <div class="form-group">
+           </div>
+           <button type="submit" class="btn btn-default">Report</button>
+         </dform>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
