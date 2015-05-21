@@ -90,6 +90,10 @@ a.default { color: #6a6a6a;}
   padding: 10px 15px;
   /* margin-bottom: -1px; */
   margin-bottom: 3px;
-  background-color: #efefef;
+  background-color: #e1e1e1;
   
+}
+
+p.top {
+  font-size: 10px;
 }

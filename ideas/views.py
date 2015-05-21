@@ -351,3 +351,19 @@ def report(request):
 		return HttpResponseRedirect('/ideas/')
 
 
+def d3_ideas_map(request):
+	context = RequestContext(request)
+	drops = Drops.objects.all()
+
+	serializer = D3Serializer(drops, many=True)
+	data = []
+	for d in drops:
+		if d.parent_id_id is None:
+			data.append({'source': d.id, 'target': d.id, 'value': 0})
+		else:
+			data.append({'source': d.id, 'target': d.parent_id_id, 'value': 0})
+	jdata = json.dumps(data)
+	ldata = json.loads(jdata)
+
+
+	return JSONResponse({'nodes': serializer.data, 'links': ldata})

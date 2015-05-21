@@ -5,7 +5,6 @@
 <script>
 $(document).ready(function () {
   var loc = document.URL.indexOf('mypage')
-  console.log(loc)
   if (document.URL.indexOf('mypage') != -1 ) {
     $('a[href=#mine]').tab('show') 
   } else if (document.URL.indexOf('watchpage') != -1 ) {
@@ -13,16 +12,54 @@ $(document).ready(function () {
   } else {
     $('a[href=#latest]').tab('show') 
   }
+
+$("li.top-ideas").each(function() {
+  var ideaid = $(this).attr("id");
+  var url = "/ideas/view/subs/"+ideaid
+    $.ajax({
+      type: "GET",
+      url: url,
+      success: function(data)
+      {
+        var count = 0;
+        $.each(data, function(index, val) {
+          count++
+          
+        })
+        $("#"+ideaid+" span").text("Replies " + count)
+      }
+    })
+
+  })
 })
 </script>
-
+<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
 <div class="row">
- <div class="col-md-5 col-md-offset-1">
+ <div class="col-md-7 col-md-offset-1">
   <button type="button" class="btn btn-default" data-toggle="modal" data-target="#ideaModal">Add Idea</button><br />
  	<h3>Top Ideas</h3>
+ </div>
+</div>
+<div class="row">
+<div class="col-md-7 col-md-offset-1">
   <ul class="list-group">
 {% for drop in drop_parents %}
-	 <a href="view/{{ drop.id }}" class="default"><li class="top-ideas">{{ drop.data|title|truncatechars:100 }}</li></a>
+	 <a href="view/{{ drop.id }}" class="default"><li class="top-ideas" id="{{ drop.id }}"><h4>{{ drop.data|title|truncatechars:150 }}</h4></a>
+    <div class="row">
+     <div class="col-md-3">
+      <p class="top">
+       Submitted {{ drop.date|timesince }}
+      </p>
+     </div>
+    </div>
+    <div class="row"> 
+    <div class="col-md-6">
+      <p class="top">
+        Views: {{ drop.views }} &nbsp; - &nbsp; <span id="{{drop.id}}"></span>
+       &nbsp; - &nbsp;Short URL: <a href="http://gzon.co/{{ drop.short }}">http://gzon.co{{ drop.short }}</a>
+     </p>
+    </div>
+   </li>
 {% endfor %}
 {% if drop_parents.has_previous %} 
   <a href="?page={{ drop_parents.previous_page_number }}"><span class="label label-info">Prev</span></a>
@@ -34,80 +71,115 @@ $(document).ready(function () {
 
   </ul>
  </div>
- <div class="col-md-5 col-md-offset-0">
-  <div class="row">
-    <div class="col-md-12" role="tabpanel">
-      <ul class="nav nav2 nav-tabs" role="tablist">
-        <li  class="active" role="presentation" ><a aria-controls="latest" data-toggle="tab"href="#latest">Latest</a></li>
-        <li role="presentation" ><a aria-controls="watch" data-toggle="tab" href="#watch">Watching</a></li>
-        <li role="presentation" ><a aria-controls="mine" data-toggle="tab" href="#mine">My Ideas</a></li>
-      </ul>
-      <div class="tab-content">
-        <div role="tabpanel1" class="tab-pane active" id="latest">
-          <ul class="list-unstyled">
-            {% for r in latest %}
-           {% if r.drop_type == 'spark' %}
-             <li class="default spark"><a href="{{ r.id }}">{{ r.data|truncatechars:100}}</a></li>
-            {% elif r.drop_type == 'idea' %}
-    	       <li class="default idea"><a href="view/{{ r.id }}">{{ r.data|truncatechars:100 }}</a></li>
-            {% elif r.drop_type == 'action' %}
-    	       <li class="default action"><a href="view/{{ r.id }}">{{ r.data|truncatechars:100 }}</a></li>
-            {% else %}
-    	       {{ pass }}
-            {% endif %}
-           {% endfor %}
-          </ul>
-          {% if latest.has_next %}
-             <a href="?latest={{ latest.next_page_number }}"><span class="label label-default">Next</span></a>
-          {% endif %}
-          {% if latest.has_previous %}
-             <a href="?latest={{ latest.previous_page_number }}"><span class="label label-default">Prev</span></a>
-          {% endif %}
-        </div>
-        <div role="tabpanel1" class="tab-pane" id="watch">
-          {% if user.is_authenticated %}
-           <ul class="list-unstyled">
-           {% for w in watching %}
-            {% if w.drop.drop_type == 'spark' %}
-             <li class="default spark"><a href="view/{{ w.drop.id }}">{{ w.drop.data|truncatechars:100 }}</a></li>
-            {% elif w.drop.drop_type == 'idea' %} 
-             <li class="default idea"><a href="view/{{ w.drop.id }}">{{ w.drop.data|truncatechars:100}}</a></li>
-            {% elif w.drop.drop_type == 'action' %}
-             <li class="default action"><a href="view/{{ w.drop.id }}">{{ w.drop.data|truncatechars:100}}</a></li>
-            {% endif %}
-           {% endfor %}
-          {% else %}
-            You must be logged in
-          {% endif %}
-        </div>
-        <div role="tabpanel1" class="tab-pane" id="mine">
-          {% if user.is_authenticated %}
-           <ul class="list-unstyled">
-           {% for m in mine %}
-            {% if m.drop_type == 'spark' %}
-             <li class="default spark"><a href="view/{{m.id}}">{{ m.data|truncatechars:70 }}</a></li>
-            {% elif m.drop_type == 'idea' %}
-             <li class="default idea"><a href="view/{{m.id}}">{{ m.data|truncatechars:70 }}</a></li>
-            {% elif m.drop_type == 'action' %}
-             <li class="default action"><a href="view/{{m.id}}">{{ m.data|truncatechars:70 }}</a></li>
-            {% endif %}
-           {% endfor %}
-           </ul>
-           {% if mine.has_previous %}
-             <a href="?mypage={{ mine.previous_page_number }}"><span class="label label-default">Prev</span></a>
-           {% endif %}
-           {% if mine.has_next %}
-             <a href="?mypage={{ mine.next_page_number }}"><span class="label label-default">Next</span></a>
-           {% endif %}
-
-          {% else %}
-            You must be logged in
-          {% endif %}
-        </div>          
-      </div>
-    </div>
-  </div>
+ <div class="col-md-3" id="svg" style="min-height: 500px; width: 300px; background: #e1e1e1; margin-bottom: 20px; border: 0px solid black">
  </div>
+
+ <script type="text/javascript">
+    
+    var width = $("#svg").width(),
+        height = $("#svg").height();
+    
+    var zoom = d3.behavior.zoom()
+        .scaleExtent([1, 10])
+        .on("zoom", zoomed);
+
+    var drag = d3.behavior.drag()
+      .origin(function(d) { return d; })
+      .on("dragstart", dragstarted)
+      .on("drag", dragged)
+      .on("dragend", dragended);
+
+    var color = d3.scale.category20();
+    
+    var force = d3.layout.force()
+        .gravity(.05)
+        .charge(-100)
+        .linkDistance(20)
+        .size([width, height]);
+
+
+    var svg = d3.select("#svg").append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("pointer-events", "all");
+
+    d3.json("/ideas/map/", function( error, json) {
+      console.log(json);
+      var edges = [];
+         json.links.forEach(function(e){
+          var sourceNode = json.nodes.filter(function(n) { return n.id === e.source; })[0],
+          targetNode = json.nodes.filter(function(n) { return n.id === e.target; })[0];
+          
+          edges.push({source: sourceNode, target: targetNode, value: e.value});
+          
+         })
+         
+      force
+          .nodes(json.nodes)
+          .links(edges)
+          .start();
+    
+      var link = svg.selectAll("line.link")
+          .data(edges)
+        .enter().append("line")
+          .attr("class", "link")
+          /*.style("stroke-width", function(d) { return Math.sqrt(d.value); });*/
+          .style("stroke-width", "1px");
+    
+      var node = svg.selectAll("circle.node")
+          .data(json.nodes)
+        .enter().append("circle")
+          .attr("class", "node")
+          .attr("r", function(d){return d.weight+5;})
+          .style("fill", function(d) { // return color(d.group); })
+    
+            if(d.drop_type==='idea') return "#fefeb5";
+            if(d.drop_type==='spark') return "#fed3d3";
+            if(d.drop_type==='action') return "#babafe";
+            
+          })
+          .on("click", function(d){
+            // console.log(d)
+            // $location.search(d,d.id);
+            if (d3.event.defaultPrevented) return;
+            window.location.href="/ideas/view/" + d.id ;
+            
+          })
+          .call(force.drag);
+
+
+      node.append("title")
+          .text(function(d) { return d.name; });
+      node.attr("id", function(d) { return d.id;});
+    
+      force.on("tick", function() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+    
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+      });
+    });
+  function zoomed() {
+    container.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+  }
+
+  function dragstarted(d) {
+    d3.event.sourceEvent.stopPropagation();
+    d3.select(this).classed("dragging", true);
+  }
+
+  function dragged(d) {
+    d3.select(this).attr("cx", d.x = d3.event.x).attr("cy", d.y = d3.event.y);
+  }
+
+  function dragended(d) {
+   d3.select(this).classed("dragging", false);
+  }
+ </script>
+
 </div>
 
 <div class="modal fade" id="ideaModal" tabindex="-1" role="dialog" aria-labelledby="ideaModalLabel" aria-hidden="true">
