@@ -249,7 +249,11 @@ def user_login(request):
 			return HttpResponseRedirect('/ideas/login/')
 
 	else:
-		return render_to_response('ideas/login.html', {'login_fail': "Invalid Credentials"},context)
+		referer = request.META.get('HTTP_REFERER')
+		context_dict = {'referer': referer}
+		if "ideas/login" in referer:
+			context_dict['login_fail'] = "Invalid Credentials"
+		return render_to_response('ideas/login.html', context_dict,context)
 		
 def user_logout(request):
 	logout(request)
