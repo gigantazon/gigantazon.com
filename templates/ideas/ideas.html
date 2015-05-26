@@ -71,12 +71,12 @@ $("li.top-ideas").each(function() {
 
   </ul>
  </div>
- <div class="col-md-3" id="svg" style="min-height: 500px; width: 300px; background: #e1e1e1; margin-bottom: 20px; border: 0px solid black">
+ <div class="col-md-3" id="svg" style="height: 600px; width: 300px; background: #e1e1e1; margin-bottom: 20px; border: 0px solid black">
  </div>
 
  <script type="text/javascript">
     
-    var width = $("#svg").width(),
+    var width = 240//$("#svg").width(),
         height = $("#svg").height();
     
     var zoom = d3.behavior.zoom()
@@ -93,8 +93,8 @@ $("li.top-ideas").each(function() {
     
     var force = d3.layout.force()
         .gravity(.05)
-        .charge(-100)
-        .linkDistance(20)
+        .charge(-30)
+        .linkDistance(30)
         .size([width, height]);
 
 
