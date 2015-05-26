@@ -3,7 +3,8 @@
 {% block head %}
 <script>
 $(document).ready(function(){
-  
+  colorid = ''
+  mapid = ''
   $('input[name=website]').val("http://");
 
 
@@ -47,6 +48,19 @@ $(document).ready(function(){
 
         })
         $('a[rel=tooltip]').tooltip();
+        $('a[rel=tooltip]').mouseover(function() {
+          mapid = $(this).attr('id')
+          colorid = $('circle#'+mapid).css('fill')
+          r = parseInt($('circle#'+mapid).attr('r')) + 5
+          $('circle#'+mapid).css("fill", "#f66200").attr('r', r)
+
+
+        })
+        .mouseout(function() {
+          r = parseInt($('circle#'+mapid).attr('r')) - 5
+          $('circle#'+mapid).css("fill", colorid)
+          r = $('circle#'+mapid).attr('r', r)
+        })
       }
     })
   $('select#type').on('change', function() {
@@ -172,7 +186,7 @@ $(document).ready(function(){
     var force = d3.layout.force()
         .gravity(.05)
         .charge(-100)
-        .linkDistance(20)
+        .linkDistance(30)
         .size([width, height]);
     
     var svg = d3.select("#svg").append("svg")
