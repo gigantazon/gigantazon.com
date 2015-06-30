@@ -16,7 +16,7 @@ class UserProfileForm(forms.ModelForm):
 
 class DropsForm(forms.ModelForm):
 	
-	data = forms.CharField(widget=forms.TextInput(attrs={'class': 'input'}),max_length="250", help_text="Share your idea")
+	data = forms.CharField(widget=forms.TextInput(attrs={'class': 'input'}),max_length="1500", help_text="Share your idea")
 	is_parent = forms.BooleanField(widget=forms.HiddenInput())
 	parent_id = forms.IntegerField(widget=forms.HiddenInput(), required=False)
 	origin_id = forms.IntegerField(widget=forms.HiddenInput(), required=False)

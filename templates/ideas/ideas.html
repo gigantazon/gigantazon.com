@@ -44,7 +44,7 @@ $("li.top-ideas").each(function() {
 <div class="col-md-7 col-md-offset-1">
   <ul class="list-group">
 {% for drop in drop_parents %}
-	 <a href="view/{{ drop.id }}" class="default"><li class="top-ideas" id="{{ drop.id }}"><h4>{{ drop.data|title|truncatechars:150 }}</h4></a>
+	 <a href="view/{{ drop.id }}" class="default"><li class="top-ideas" id="{{ drop.id }}"><h4>{{ drop.data|truncatechars:150 }}</h4></a>
     <div class="row">
      <div class="col-md-3">
       <p class="top">
@@ -71,7 +71,7 @@ $("li.top-ideas").each(function() {
 
   </ul>
  </div>
- <div class="col-md-3" id="svg" style="height: 600px; width: 300px; background: #e1e1e1; margin-bottom: 20px; border: 0px solid black">
+ <div class="col-md-3" id="svg" style="height: 600px; width: 300px; background: #bac9ff; margin-bottom: 20px; border: 0px solid black">
  </div>
 
  <script type="text/javascript">
@@ -194,7 +194,8 @@ $("li.top-ideas").each(function() {
         <form class="form" id="add_idea" method="post" action="/ideas/">
           {% csrf_token %}
           <div class="form-group">
-            <textarea maxlength="250" class="form-control" rows="3" name="data" id="textIdea" placeholder="Add your idea" style="max-width: 80%; width: 80%"> </textarea>
+            <textarea maxlength="250" onkeyup="countChar(this)" class="form-control" rows="3" name="data" id="textIdea" placeholder="Add your idea" style="max-width: 80%; width: 80%"> </textarea><div id="charNum"></div>
+
           </div>
           <button type="submit" class="btn btn-default">Submit</button>
         </form>
@@ -239,4 +240,15 @@ $("li.top-ideas").each(function() {
     </div>
   </div>
 </div>
+
+<script>
+  function countChar(val) {
+      var len = val.value.length;
+      if (len >= 250) {
+       val.value = val.value.substring(0, 250);
+       } else {
+         $('#charNum').text(250 - len);
+       }
+   };
+</script>
 {% endblock %}

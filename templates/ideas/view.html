@@ -155,7 +155,7 @@ $(document).ready(function(){
 {% if origin %} 
 <div class="row">
  <div class="col-md-10 col-md-offset-1">
-  <h3><a href="/ideas/view/{{origin.id}}">{{ origin|title }}</a></h3>
+  <h3><a href="/ideas/view/{{origin.id}}">{{ origin }}</a></h3>
  </div>
 </div>
 {% endif %}
@@ -320,7 +320,7 @@ $(document).ready(function(){
            </select>
           </div>
           <div class="form-group" id="textarea-idea" style="margin-top: 5px">
-            <textarea maxlength="250" class="form-control" rows="3" name="data" id="textIdea" placeholder="Add your idea" style="max-width: 80%; width: 80%"> </textarea>
+            <textarea maxlength="1500" onkeyup="countChar(this)" class="form-control" rows="3" name="data" id="textIdea" placeholder="Add your idea" style="max-width: 80%; width: 80%"> </textarea><div id="charNum"></div>
           </div>
           <button type="submit" class="btn btn-default">Submit</button>
         </form>
@@ -387,4 +387,15 @@ $(document).ready(function(){
     </div>
   </div>
 </div>
+
+<script>
+  function countChar(val) {
+      var len = val.value.length;
+      if (len >= 1500) {
+       val.value = val.value.substring(0, 1500);
+       } else {
+         $('#charNum').text(1500 - len);
+       }
+   };
+</script>
 {% endblock %}

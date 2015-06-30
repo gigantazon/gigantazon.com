@@ -77,7 +77,7 @@ class UserProfile(models.Model):
 		return self.user.username
 
 class Drops(models.Model):
-	data = models.CharField(max_length=250)
+	data = models.CharField(max_length=1500)
 	url = models.URLField(max_length=1000,blank=True)
 	drop_type = models.CharField(max_length=15)
 	user = models.ForeignKey(User)
