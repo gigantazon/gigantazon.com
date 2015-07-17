@@ -98,10 +98,13 @@ $("li.top-ideas").each(function() {
         .size([width, height]);
 
 
-    var svg = d3.select("#svg").append("svg")
+    var svg = d3.select("#svg").append("svg:svg")
         .attr("width", width)
         .attr("height", height)
-        .attr("pointer-events", "all");
+        .attr("pointer-events", "all")
+	.append('svg:g')
+	    .call(d3.behavior.zoom().on('zoom', redraw))
+	.append('svg:g');
 
     d3.json("/ideas/map/", function( error, json) {
       console.log(json);
@@ -178,6 +181,10 @@ $("li.top-ideas").each(function() {
   function dragended(d) {
    d3.select(this).classed("dragging", false);
   }
+
+  function redraw() {
+	svg.attr('transform', 'translate(' + d3.event.translate + ')' + 'scale(' + d3.event.scale + ')');
+  };
  </script>
 
 </div>
