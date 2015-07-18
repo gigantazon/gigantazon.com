@@ -35,13 +35,17 @@ $("li.top-ideas").each(function() {
 </script>
 <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
 <div class="row">
- <div class="col-md-7 col-md-offset-1">
+ <div class="col-md-8 col-md-offset-1">
   <button type="button" class="btn btn-default" data-toggle="modal" data-target="#ideaModal">Add Idea</button><br />
  	<h3>Top Ideas</h3>
  </div>
 </div>
+<div class="row" style="padding-left: 20px; padding-right: 30px">
+ <div class="col-md-8 col-md-offset-1" id="svg" style="height: 250px; background: #bac9ff; margin-bottom: 20px; border: 1px solid black">
+
+<span style="font-size: .7em">scroll to zoom; click to drag</span></div></div>
 <div class="row">
-<div class="col-md-7 col-md-offset-1">
+<div class="col-md-8 col-md-offset-1">
   <ul class="list-group">
 {% for drop in drop_parents %}
 	 <a href="view/{{ drop.id }}" class="default"><li class="top-ideas" id="{{ drop.id }}"><h4>{{ drop.data|truncatechars:150 }}</h4></a>
@@ -71,13 +75,13 @@ $("li.top-ideas").each(function() {
 
   </ul>
  </div>
- <div class="col-md-3" id="svg" style="height: 600px; width: 300px; background: #bac9ff; margin-bottom: 20px; border: 0px solid black">
- </div>
+
 
  <script type="text/javascript">
     
-    var width = 240//$("#svg").width(),
-        height = $("#svg").height();
+    var width = $("#svg").width(),
+        height = 230;
+        console.log(width, height)
     
     var zoom = d3.behavior.zoom()
         .scaleExtent([1, 10])
@@ -93,8 +97,8 @@ $("li.top-ideas").each(function() {
     
     var force = d3.layout.force()
         .gravity(.05)
-        .charge(-30)
-        .linkDistance(30)
+        .charge(-60)
+        .linkDistance(70)
         .size([width, height]);
 
 
@@ -208,7 +212,7 @@ $("li.top-ideas").each(function() {
         </form>
       </div>
        {% else %}
-       <h4>Please Register</h4>
+       <h4>Please Register or <a href="/ideas/login">login</a></h4>
       </div>
       <div class="modal-body">
          <form id="user_form" method="post" action="/ideas/register/" enctype="multipart/form-data">

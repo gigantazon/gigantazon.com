@@ -169,7 +169,7 @@ def view_idea(request, idea_id):
 
 def get_idea_subs(request, idea_id):
 	context = RequestContext(request)
-	drops = Drops.objects.filter(Q(parent_id=idea_id)|Q(origin_id=idea_id))
+	drops = Drops.objects.filter(parent_id=idea_id)
 
 	serializer = DropsSerializer(drops, many=True)
 	return JSONResponse(serializer.data)
