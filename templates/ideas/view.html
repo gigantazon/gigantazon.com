@@ -54,16 +54,18 @@ $(document).ready(function(){
         $('a[rel=tooltip]').tooltip();
         $('a[rel=tooltip]').mouseover(function() {
           mapid = $(this).attr('id')
+          
           colorid = $('circle#'+mapid).css('fill')
           r = parseInt($('circle#'+mapid).attr('r')) + 5
           $('circle#'+mapid).css("fill", "#f66200").attr('r', r)
-
-
+          $('text[id='+mapid+']').css('font-size', '20px').attr('fill', 'black')
+          
         })
         .mouseout(function() {
           r = parseInt($('circle#'+mapid).attr('r')) - 5
           $('circle#'+mapid).css("fill", colorid)
           r = $('circle#'+mapid).attr('r', r)
+          $('text[id='+mapid+']').css('font-size', '10px').attr('fill', '#5e5e5e')
         })
       }
     })
@@ -147,6 +149,10 @@ $(document).ready(function(){
   })
  $('a').tooltip();
  });   
+
+function trimText(text) {
+  return text.length > 20 ? text.substring(0, 20 - 3) + '...' : str
+}
 </script>
 <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
 
@@ -188,7 +194,7 @@ $(document).ready(function(){
         console.log(width, height)
     
     var zoom = d3.behavior.zoom()
-        .scaleExtent([1, 10])
+        .scaleExtent([1, 20])
         .on("zoom", zoomed);
 
     var drag = d3.behavior.drag()
@@ -202,7 +208,7 @@ $(document).ready(function(){
     var force = d3.layout.force()
         .gravity(.05)
         .charge(-60)
-        .linkDistance(70)
+        .linkDistance(50)
         .size([width, height]);
 
 
@@ -269,8 +275,11 @@ $(document).ready(function(){
       var texts = svg.selectAll("text.label")
                 .data(json.nodes)
                 .enter().append("text")
-                .attr("class", "label")
-                .text(function(d) {  return d.name;  });
+                .attr("class", "map-label")
+                .attr("text-anchor", "middle")
+                .attr("fill", "#5e5e5e")
+                .attr("id", function(d) { return d.id; })
+                .text(function(d) {  return d.name.length > 20 ? d.name.substring(0, 20) + '...' : d.name;  });
     
       force.on("tick", function() {
         link.attr("x1", function(d) { return d.source.x; })
@@ -282,7 +291,7 @@ $(document).ready(function(){
             .attr("cy", function(d) { return d.y; });
 
         texts.attr("transform", function(d) {
-            return "translate(" + d.x + "," + d.y + ")";
+            return "translate(" + (d.x - 5) + "," + (d.y - 10) + ")";
         });
 
       });

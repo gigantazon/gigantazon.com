@@ -99,7 +99,6 @@ p.top {
   font-size: 10px;
 }
 
-label {
-  font-size: 8px;
-  background-color: white;
+.map-label {
+  font-size: 10px;
 }

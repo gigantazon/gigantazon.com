@@ -48,7 +48,7 @@ $("li.top-ideas").each(function() {
 <div class="col-md-8 col-md-offset-1">
   <ul class="list-group">
 {% for drop in drop_parents %}
-	 <a href="view/{{ drop.id }}" class="default"><li class="top-ideas" id="{{ drop.id }}"><h4>{{ drop.data|truncatechars:150 }}</h4></a>
+	 <a href="view/{{ drop.id }}" class="default"><li class="top-ideas" id="{{ drop.id }}"><h4>{{ drop.data }}</h4></a>
     <div class="row">
      <div class="col-md-3">
       <p class="top">
