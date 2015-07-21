@@ -136,6 +136,8 @@ def view_idea(request, idea_id):
 	else:
 		children = Drops.objects.filter(origin_id=idea_id).count()
 
+	drops = Drops.objects.get(id=title.id)
+
 	if title.origin_id:
 		origin = Drops.objects.get(id=title.origin_id)
 	else:
@@ -150,7 +152,7 @@ def view_idea(request, idea_id):
 	user_form = UserForm()
 	profile_form = UserProfileForm()
 
-	context_dict = { 'title': title,'children': children, 'origin': origin, 'profile_form': profile_form, 'user_form': user_form }
+	context_dict = { 'title': title,'children': children, 'origin': origin, 'profile_form': profile_form, 'user_form': user_form , 'drops': drops}
 	uid = request.user
 	try:
 		submitter = User.objects.get(username=title.user)

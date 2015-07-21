@@ -21,12 +21,8 @@ $("li.top-ideas").each(function() {
       url: url,
       success: function(data)
       {
-        var count = 0;
-        $.each(data, function(index, val) {
-          count++
-          
-        })
-        $("#"+ideaid+" span").text("Replies: " + count)
+        $("span."+ideaid).html("Replies: "+data.length)
+        
       }
     })
 
@@ -52,14 +48,14 @@ $("li.top-ideas").each(function() {
     <div class="row">
      <div class="col-md-3">
       <p class="top">
-       Submitted {{ drop.date|timesince }}
+       Submitted {{ drop.date|timesince }} ago
       </p>
      </div>
     </div>
     <div class="row"> 
     <div class="col-md-6">
       <p class="top">
-        Views: {{ drop.views }} &nbsp; - &nbsp; <span id="{{drop.id}}"></span>
+        Views: {{ drop.views }} &nbsp; - &nbsp; <span class="{{drop.id}}"></span>
        &nbsp; - &nbsp;Short URL: <a href="http://gzon.co/{{ drop.short }}">http://gzon.co{{ drop.short }}</a>
      </p>
     </div>
@@ -81,7 +77,7 @@ $("li.top-ideas").each(function() {
     
     var width = $("#svg").width(),
         height = 230;
-        console.log(width, height)
+      
     
     var zoom = d3.behavior.zoom()
         .scaleExtent([1, 10])
@@ -111,7 +107,7 @@ $("li.top-ideas").each(function() {
 	.append('svg:g');
 
     d3.json("/ideas/map/", function( error, json) {
-      console.log(json);
+      
       var edges = [];
          json.links.forEach(function(e){
           var sourceNode = json.nodes.filter(function(n) { return n.id === e.source; })[0],

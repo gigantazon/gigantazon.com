@@ -91,6 +91,22 @@ class Drops(models.Model):
 	def __unicode__(self):
 		return self.data
 
+	def ideas(self):
+		i = Drops.objects.filter(origin_id=self.id, drop_type='idea')
+		return i
+
+	def sparks(self):
+		s = Drops.objects.filter(origin_id=self.id, drop_type='spark')
+		return s
+
+	def actions(self):
+		a = Drops.objects.filter(origin_id=self.id, drop_type='action')
+		return a
+
+	def children(self):
+		c = Drops.objects.filter(parent_id=self.id)
+		return c
+		
 class Comments(models.Model):
 		idea = models.ForeignKey(Drops)
 		comment = models.CharField(max_length=5000)

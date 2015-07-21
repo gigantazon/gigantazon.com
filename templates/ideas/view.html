@@ -14,61 +14,38 @@ $(document).ready(function(){
 
   var idea_id = {{ title.id }}
 
-  var url = "/ideas/view/subs/"+idea_id
+  $("li.top-ideas").each(function() {
+    var ideaid = $(this).attr("id");
+    var p = $(this).parent()
+    var url = "/ideas/view/subs/"+ideaid
     $.ajax({
       type: "GET",
       url: url,
       success: function(data)
-      {
-        //console.log(data)
-        $.each(data, function(index, val) {
-              
-              if ( val.drop_type === 'spark'){
-                  $('ul#spark_list').append("<a class='default' id='"+val.id+"' href='/ideas/view/"+val.id+"' rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='Tooltip'><li class='top-ideas spark' id='"+val.id+"' >"+val.data+"</li></a>")
-              } else if ( val.drop_type === 'idea') {
-                  $('ul#idea_list').append("<a class='default' id='"+val.id+"' href='/ideas/view/"+val.id+"' rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='Tooltip'><li class='top-ideas idea' id='"+val.id+"'>"+val.data+"</li></a>")
-              } else  {
-                  $('ul#action_list').append("<a class='default' id='"+val.id+"' href='/ideas/view/"+val.id+"' rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='Tooltip'><li class='top-ideas action' id='"+val.id+"'>"+val.data+"</li></a>")
-              }
-             
+        {
 
-        })
-        $("li.top-ideas").each(function() {
-          var ideaid = $(this).attr("id");
-          var p = $(this).parent()
-          var url = "/ideas/view/subs/"+ideaid
-          $.ajax({
-            type: "GET",
-            url: url,
-            success: function(data)
-            {
-              var count = 0;
-              $.each(data, function(index, val) {
-                count++
-              })
-              $(p).attr('data-original-title', 'Replies: '+count)
-            }
-          })
-
-        })
-        $('a[rel=tooltip]').tooltip();
-        $('a[rel=tooltip]').mouseover(function() {
-          mapid = $(this).attr('id')
-          
-          colorid = $('circle#'+mapid).css('fill')
-          r = parseInt($('circle#'+mapid).attr('r')) + 5
-          $('circle#'+mapid).css("fill", "#f66200").attr('r', r)
-          $('text[id='+mapid+']').css('font-size', '20px').attr('fill', 'black')
-          
-        })
-        .mouseout(function() {
-          r = parseInt($('circle#'+mapid).attr('r')) - 5
-          $('circle#'+mapid).css("fill", colorid)
-          r = $('circle#'+mapid).attr('r', r)
-          $('text[id='+mapid+']').css('font-size', '10px').attr('fill', '#5e5e5e')
-        })
-      }
+          $(p).attr('data-original-title', 'Replies: '+data.length)
+        }
     })
+
+  })
+  $('a[rel=tooltip]').tooltip();
+  $('a[rel=tooltip]').mouseover(function() {
+    mapid = $(this).attr('id')
+          
+    colorid = $('circle#'+mapid).css('fill')
+    r = parseInt($('circle#'+mapid).attr('r')) + 5
+    $('circle#'+mapid).css("fill", "#f66200").attr('r', r)
+    $('text[id='+mapid+']').css('font-size', '20px').attr('fill', 'black')
+  })
+  .mouseout(function() {
+    r = parseInt($('circle#'+mapid).attr('r')) - 5
+    $('circle#'+mapid).css("fill", colorid)
+    r = $('circle#'+mapid).attr('r', r)
+    $('text[id='+mapid+']').css('font-size', '10px').attr('fill', '#5e5e5e')
+  })
+
+ 
   $('select#type').on('change', function() {
     $('.control-label').remove();
     var type = this.value;
@@ -170,20 +147,23 @@ function trimText(text) {
 </div>
 {% endif %}
 <div class="row" id="main" style="margin-top: 20px;">
- <div class="col-md-3 col-md-offset-1">
-  <ul class="list-unstyled">
+<div class="col-md-8 col-md-offset-1" style=" border: 1px solid #e1e1e1; margin-bottom: 20px">
+ <div class="row">
+  <div class="col-md-4">
+   <ul class="list-unstyled">
     <li><h3>{{ title  }}</h3></li>
     {% if title.url %} <a target="_new" href="{{ title.url}}">{{ title.url }}</a>{% endif%}
     <li>Link: <a href="http://gzon.co/{{title.short}}">gzon.co/{{title.short }}</a></li>
     <li>Date submitted: {{ title.date|date }}</li>
     <li>Views: {{ title.views }}</li>
     <li>Replies: {{ children }}</li>
-  </ul>
-  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#ideaModal">Add Reply</button> 
-  {% if user.is_authenticated %}{% if watching == True %}<button type="button" id="unwatch" class="btn btn-default">UnWatch</button>{% else %}<button type="button" id="watch" class="btn btn-default">Watch</button>{% endif %}{% endif %}
-  <a id="report" href="#" data-toggle="modal" data-target="#reportModal">Report</a>
- </div>
- <div class="col-md-5" id="svg" style="min-height: 250px; background: #e5e5e5; margin-bottom: 20px; border: 1px solid black">
+   </ul>
+   <button type="button" class="btn btn-default" data-toggle="modal" data-target="#ideaModal">Add Reply</button> 
+    {% if user.is_authenticated %}{% if watching == True %}<button type="button" id="unwatch" class="btn btn-default">UnWatch</button>{% else %}<button type="button" id="watch" class="btn btn-default">Watch</button>{% endif %}{% endif %}
+   <a id="report" href="#" data-toggle="modal" data-target="#reportModal">Report</a>
+  </div>
+  <div class="col-md-5" id="svg" style="min-height: 250px; background: #fff; ">
+  </div>
  </div>
 </div>
 <script type="text/javascript">
@@ -272,14 +252,6 @@ function trimText(text) {
           .text(function(d) { return d.name; });
       node.attr("id", function(d) { return d.id;});
 
-      var texts = svg.selectAll("text.label")
-                .data(json.nodes)
-                .enter().append("text")
-                .attr("class", "map-label")
-                .attr("text-anchor", "middle")
-                .attr("fill", "#5e5e5e")
-                .attr("id", function(d) { return d.id; })
-                .text(function(d) {  return d.name.length > 20 ? d.name.substring(0, 20) + '...' : d.name;  });
     
       force.on("tick", function() {
         link.attr("x1", function(d) { return d.source.x; })
@@ -289,10 +261,6 @@ function trimText(text) {
     
         node.attr("cx", function(d) { return d.x; })
             .attr("cy", function(d) { return d.y; });
-
-        texts.attr("transform", function(d) {
-            return "translate(" + (d.x - 5) + "," + (d.y - 10) + ")";
-        });
 
       });
     });
@@ -321,30 +289,67 @@ function trimText(text) {
 <div class="row">
  <div class="col-md-8 col-md-offset-1">
 
-  <div class="row" style="min-height: 250px">
-
-    <div class="col-md-4">
-     <div class="spark alert"><center><h4>Sparks</h4></center></div>
-     <ul id="spark_list" class="list-group">
-
-     </ul>
+  <div class="panel-group" id="accordian" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default">
+      <div class="panel-heading" style="background-color: #fee5e5" role="tab" id="headingOne">
+        <center><h4 style="margin-top: 5px">
+          <a role="button" data-toggle="collapse" data-parent="#accordian" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+           Sparks
+          </a>
+        </h4></center>
+      </div>
+      <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+        <div class="panel-body">
+          <ul id="spark_list" class="list-group">
+            {% for spark in drops.sparks %}
+              <a class='default' id='{{ spark.id }}' href='/ideas/view/{{ spark.id }}' rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='Tooltip'>
+              <li class='top-ideas ' id='{{ spark.id }}' >
+                <h4>RE: {{ spark.parent_id.data }}</h4> 
+                {{ spark.data }}</li>
+              </a>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading" style="background-color: #fefee5" role="tab" id="headingTwo">
+        <center><h4 style="margin-top: 5px">
+          <a role="button" data-toggle="collapse" data-parent="#accordian" href="#collapseTwo" aria-expanded="true" aria-controls="collapseOne">
+           Ideas
+          </a>
+        </h4></center>
+      </div>
+      <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+        <div class="panel-body">
+          <ul id="idea_list" class="list-group">
+            {% for idea in drops.ideas %}
+              <a class='default' id='{{ idea.id }}' href='/ideas/view/{{ idea.id }}' rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='Tooltip'><li class='top-ideas ' id='{{ idea.id }}' >{{ idea.data }}</li></a>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading" style="background-color: #e5e5fe" role="tab" id="headingOne">
+        <center><h4 style="margin-top: 5px">
+          <a role="button" data-toggle="collapse" data-parent="#accordian" href="#collapseThree" aria-expanded="true" aria-controls="collapseOne">
+           Actions
+          </a>
+        </h4></center>
+      </div>
+      <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+        <div class="panel-body">
+          <ul id="action_list" class="list-group">
+            {% for action in drops.actions %}
+              <a class='default' id='{{ action.id }}' href='/ideas/view/{{ action.id }}' rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='Tooltip'><li class='top-ideas ' id='{{ action.id }}' >{{ action.data }}</li></a>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
     </div>
 
-    <div class="col-md-4">
-     <div class="idea alert" id="title"><center><h4>Ideas</h4></center></div>
-      <ul id="idea_list" class="list-group">
-
-      </ul>
-    </div>
-
-    <div class="col-md-4">
-     <div class="action alert"><center><h4 class="">Actions</h4></center></div>
-     <ul id="action_list" class="list-group">
-
-      </ul>
-    </div>
-
-  </div><!-- row -->
+  
  </div><!-- column -->
 </div><!-- row -->
 
