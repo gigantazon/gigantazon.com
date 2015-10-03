@@ -5,7 +5,7 @@
 <script>
 $(document).ready(function(){
   $('text.label').each(function() {
-    console.log($(this))
+
   })
   colorid = ''
   mapid = ''
@@ -23,7 +23,6 @@ $(document).ready(function(){
       url: url,
       success: function(data)
         {
-          console.log(data.length)
           var count = 0;
           $.each(data, function(index, val) {
           count++
@@ -180,7 +179,7 @@ function trimText(text) {
     
     var width = $("#svg").width(),
         height = 230;
-        console.log(width, height)
+        
     
     var zoom = d3.behavior.zoom()
         .scaleExtent([1, 20])
@@ -301,7 +300,7 @@ function trimText(text) {
   <div class="row" style="min-height: 250px">
 
     <div class="col-md-4">
-     <div class="spark alert"><center><h4>Sparks</h4></center></div>
+     <div class="spark alert"><center style="margin-top: 8px"><h4>Sparks</h4></center></div>
      <ul id="spark_list" class="list-group">
       {% for spark in drops.sparks %}
         <a class='default' id='{{ spark.id }}' href='/ideas/view/{{ spark.id }}' rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='Tooltip'><li class='top-ideas spark' id='{{ spark.id }}' >{{ spark.data }}<br />
@@ -311,20 +310,22 @@ function trimText(text) {
     </div>
 
     <div class="col-md-4">
-     <div class="idea alert" id="title"><center><h4>Ideas</h4></center></div>
+     <div class="idea alert" id="title"><center style="margin-top: 8px"><h4>Notions</h4></center></div>
       <ul id="idea_list" class="list-group">
         {% for idea in drops.ideas %}
-        <a class='default' id='{{ idea.id }}' href='/ideas/view/{{ idea.id }}' rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='Tooltip'><li class='top-ideas idea' id='{{ idea.id }}' >{{ idea.data }}</li></a>
+        <a class='default' id='{{ idea.id }}' href='/ideas/view/{{ idea.id }}' rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='Tooltip'><li class='top-ideas idea' id='{{ idea.id }}' >{{ idea.data }}<br />
+         <small style="font-size: .7em">replies: {{idea.children.count }} | views: {{idea.views}}</small></li></a>
         {% endfor %}
 
       </ul>
     </div>
 
     <div class="col-md-4">
-     <div class="action alert"><center><h4 class="">Actions</h4></center></div>
+     <div class="action alert"><center style="margin-top: 8px"><h4 class="">Deeds</h4></center></div>
      <ul id="action_list" class="list-group">
       {% for action in drops.actions %}
-        <a class='default' id='{{ action.id }}' href='/ideas/view/{{ action.id }}' rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='Tooltip'><li class='top-ideas action' id='{{ action.id }}' >{{ action.data }}</li></a>
+        <a class='default' id='{{ action.id }}' href='/ideas/view/{{ action.id }}' rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='Tooltip'><li class='top-ideas action' id='{{ action.id }}' >{{ action.data }}<br />
+         <small style="font-size: .7em">replies: {{action.children.count }} | views: {{action.views}}</small></li></a>
       {% endfor %}
 
       </ul>
