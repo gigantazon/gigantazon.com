@@ -25,8 +25,11 @@ def gen_small(size=6, chars=string.ascii_letters + string.digits):
 	return ''.join(random.choice(chars) for _ in range(size))
 
 def index(request):
-        context = RequestContext(request)
-        return  render_to_response('ideas/index.html', context)
+    context = RequestContext(request)
+    user_form = UserForm()
+    profile_form = UserProfileForm()
+    context_dict = {'user_form': user_form, 'profile_form': profile_form }
+    return  render_to_response('ideas/index.html', context_dict, context)
 
 
 class JSONResponse(HttpResponse):
@@ -220,6 +223,8 @@ def register(request):
 
 			profile.save()
 			registered = True
+			new_user = authenticate(username=request.POST['username'], password=request.POST['password'])
+			login(request, new_user)
 		else:
 			print user_form.errors, profile_form.errors
 	else:
@@ -253,8 +258,7 @@ def user_login(request):
 	else:
 		referer = request.META.get('HTTP_REFERER')
 		context_dict = {'referer': referer}
-		if "ideas/login" in referer:
-			context_dict['login_fail'] = "Invalid Credentials"
+
 		return render_to_response('ideas/login.html', context_dict,context)
 		
 def user_logout(request):

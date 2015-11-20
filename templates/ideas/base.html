@@ -89,7 +89,7 @@ $(document).ready(function(){
 {% if user.is_authenticated %}
 <div class="row vcenter">
  <div class="col-md-1 col-md-offset-1">
-  <img class="img-responsive" src="/media/{{ profile.thumb }}" width="100%">
+  {% if profile.thumb %}<img class="img-responsive" src="/media/{{ profile.thumb }}" width="100%">{% endif %}
  </div>
  <div class="col-md-3">
   <h3>{{ user.username }}</h3>
@@ -111,11 +111,6 @@ $(document).ready(function(){
 <div class="footer">
  <div class="col-md-5 col-md-offset-2">
   <img src="/static/img/gzon-small.png" width="150px"><br />
-  <a href="/ideas/">Home</a><br />
-  <a href="/ideas/faq/">FAQ</a><br />
-  <a href="/ideas/register">Register</a><br />
-  <a href="/">Welcome</a><br />
-  <!--<a href="/ideas/tos/">Terms of Service</a><br/>-->
  </div>
 </div>
 </body>

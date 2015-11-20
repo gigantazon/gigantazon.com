@@ -22,7 +22,11 @@
       }
     }
   })
-  </script>
+
+$(document).ready(function() {
+  $('input[name=website]').val("http://");
+})
+</script>
  </head>
 <body data-spy="scroll">
 <!--<div id="splashscreen" style="background: #f5690c; position: fixed; top:0; right: 0; bottom: 0; left: 0;" align="center">
@@ -37,15 +41,32 @@
         <span class="icon-bar" style="background-color: #fff"></span>
       </button>
       <a class="navbar-brand" href="#">
-        <img src="{% static "img/gzlightbulb.png"%}" width="30px"></a>
+        <img alt="Gigantazon" src="{% static "img/gzlightbulb.png"%}" width="30px"></a>
     </div>
     <div class="collapse navbar-collapse" id="navbar-collapse-1">
       <ul class="nav navbar-nav">
+        <li>
+          <form class="navbar-form navbar-left" role="search" action="/ideas/search/" method="post" id="search"> 
+              {% csrf_token %}
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Doesn't work yet" name="search" id="search">
+              <input type="hidden" id="search-id">
+              <p id="search-description"></p>
+              <span class="input-group-btn">
+                <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+              </span>
+            </div>
+          </form>
+        </li>
+        <li>About</li>
+        <li><a href="/explore">Explore</a></li>
+        <li><a href="#">Features</a></li>
+        <li><a href="#">Pricing</a></li>
         {% if user.is_authenticated %}
          <li><a href="/ideas/logout/">Logout</a></li>
         {% else %}
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Login<span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Sign In<span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
            <form class="" id="login" method="post" action="/ideas/login/">
             {% csrf_token %}
@@ -64,9 +85,8 @@
            </form>
           </ul>
         </li>
-        <li><a href="/ideas/register/">Register</a></li>
         {% endif %}
-        <li><a href="/ideas">Get Started</a></li>
+        
       </ul>
       {% if user.is_authenticated %}
       <ul class="nav navbar-nav navbar-right">
@@ -76,98 +96,65 @@
     </div>
   </div>
 </nav> 
-<div class="container-fluid" >
-    <div class="row">
-      <div class="col-md-10 col-md-offset-1">
-        <div class="embed-responsive embed-responsive-16by9">
-          <iframe class="embed-responsive-item" src="//www.youtube.com/embed/1LN5crzo0aw?hd=1&amp;rel=0&amp;autohide=1&amp;showinfo=0&amp;theme=light&amp;autoplay=1" ></iframe>
-        </div>
-      </div>
-    </div>
 
+<div class="jumbotron" style="background-color: #ff7f2a">
+  <div class="container">
+    <div class="col-md-6">
+      <h1 class="glow" style="color: #fff">Realize your ideas</h1>
+      <p>Intuitive collaboration, conversation mapping, and a global community for public and private idea development. Publically shared ideas are always free! What's your big idea?</p>
+      <p>Private plans start at $3/month</p>
+      <p><a class="btn btn-default btn-lg" href="/about/" role="button">Learn more</a></p>
+    </div>
+    <div class="col-md-3 col-md-offset-1">
+      <form id="user_form" style="margin-top: 40px" method="post" action="/ideas/register/" enctype="multipart/form-data">
+        <div class="form-group">
+          {% csrf_token %}
+          <input type="text" class="form-control" id="id_username" name="username" placeholder="Choose a username">
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-control" id="id_email" name="email" placeholder="Enter your email">
+        </div>
+        <div class="form-group">
+          <input type="password" class="form-control" id="id_password" name="password" placeholder="Create a password">
+          <p class="help-block" style="font-size: .7em">*Please use strong passwords</p>
+        </div>
+        <button type="submit" class="btn btn-success" style="width: 100%">Register</button>
+
+      </form>
+    </div>
+  </div>  
 </div>
+
 <div class="container-fluid" id="leftCol">
   <div class="row">
-    <div class="col-md-2">
-
-    </div>
-    
-    <div class="col-md-8">
-     <div class="row">
-      <h2>What is gigantazon.com?</h2>
-      <p>
-        The mission of gigantazon.com is to make ideas actionable. It is a community platform that maps online conversations and encourages engagement from a like-minded community, what we like to call the <a href="http://www.thejustinrandall.com/anything-crowd/" target="_new">Do Anything Crowd</a>.
-      </p><p>
-        The <strong>Do Anything Crowd</strong> pulls from their <strong>3 Es (Experience, Expertise, and Education)</strong> to consider ideas, and build on them to make them happen in the real world.
-      </p><p>
-        Our <strong>SIA Platform</strong> (which stands for <strong>Sparks/Ideas/Actions</strong>), maps the segments of Human-Centered Design to make them digestible by the users. So, <strong>Sparks</strong> are similar to the Inspiration phase in Design Thinking – what is the support material for the idea, be it the inspiration of the original idea, or additional links to outside material found along the way. <strong>Ideas</strong> are essentially what you would find in the Ideation category – fields available for people to comment and move the conversation along. That could be a statement of opinion, personal experience with similar ideas, or asking clarifying questions. <strong>Actions</strong> are most closely aligned with the Implementation process – they could be deadlines for the team around an idea to have certain things accomplished, like research for the project, a team meeting, or even a virtual get together to discuss further.
-      </p><p>
-        The contributions, regardless of nature, are mapped out in relationship to the particular idea. As that happens, you’re able to watch the conversation grow as these branches take on a life of their own.
-      </p><p>
-        How is this different from any other website?
-      </p><p>
-        Even the most innovative of forums continue to use the same old technology that came out at the World Wide Web’s inception – chronologically listing contributions. Even with improved nesting functionality, the results are difficult to pore over once they reach a particular size.
-      </p><p>
-        By mapping the contributions, they are now tied to other concepts by topic, not timing. The asynchronous nature of the tool means that anyone can build off of any contribution, not just the most recent ones.
-      </p><p>
-        <em>Why should I join?</em>
-      </p><p>
-        How many great ideas have you had that you simply haven’t had the time, knowledge, or ability to bring to life? Leverage the resources of the Do Anything Crowd and make them happen!
-      </p><p>
-        As the tool to make ideas actionable for social good, gigantazon.com is the future of online communication. Our members determine how to maximize their contributions, whether by Sparking inspired Ideas or make them happen through their Actions. We are where members come together to make the world a better place.
-      </p><p>
-        Jump in, ask the world to help, and answer this:
-      </p><p>
-        gigantazon.com: What’s YOUR big idea?
-      </p>
-     </div>
+    <div class="col-md-8 col-md-offset-2">
+      <h2>A few reasons you'll love Gigantazon</h2>
     </div>
   </div>
+  <div class="row">
+    <div class="col-md-2 col-md-offset-2">
+      <h3>Online Conversation</h3>
+      <p>An online conversation like you've never seen it before.  Now you can really express yourself - link to an article to show context, comment to share your opinion, or participate in a live meeting.  It's all there.</p>
+    </div>
+    <div class="col-md-2">
+      <h3>Intuitive Communication</h3>
+      <p>FINALLY! A tool that closely mimics in-person communication. Instead of that linear, chronological, Roman-numeral type outline that we're used to seeing, you can watch the conversation grow visually.</p>
+    </div>
+    <div class="col-md-2">
+      <h3>True Collaboration</h3>
+      <p>No joke - this site was built with collaboration in mind. Follow the ideas you like, and keep coming back and bring them to life! These ideas need your help to be realized.</p>
+    </div>
+    <div class="col-md-2">
+      <h3>Crowd Innovation</h3>
+      <p>Sure, you could invite your friends to build on your idea - and you should! - but you can also get instant feedback from the Gigantazon community.</p>
+    </div>
 </div>
-
-<script type='text/javascript'>
- $(document).ready(function() {
- /* activate sidebar */
-  $('#sidebar').affix({
-    offset: {
-      top: 220
-    }
-  });
-
-  /* activate scrollspy menu */
-  var $body   = $(document.body);
-  var navHeight = $('.navbar').outerHeight(true) + 10;
-
-  $body.scrollspy({
-    target: '#leftCol',
-    offset: navHeight
-  });
-
-  /* smooth scrolling sections */
-  $('a[href*=#]:not([href=#])').click(function() {
-      if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
-        var target = $(this.hash);
-        target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
-        if (target.length) {
-          $('html,body').animate({
-             scrollTop: target.offset().top - 50
-          }, 400);
-          return false;
-        }
-      }
-  });
-});
-        
-</script>
+</div>
 
 <div class="footer">
  <div class="col-md-5 col-md-offset-2">
   <img src="/static/img/gzon-small.png" width="150px"><br />
-  <a href="/">Home</a><br />
-  <a href="/ideas/">Ideas</a><br />
-  <a href="/ideas/faq/">FAQ</a><br />
-  <a href="/ideas/register">Register</a><br />
-  <a href="/ideas/tos/">Terms of Service</a><br/>
+
  </div>
 </div>
 </body>

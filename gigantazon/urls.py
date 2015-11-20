@@ -15,6 +15,8 @@ urlpatterns = patterns('',
   	url(r'^gzonadmin/', include(admin.site.urls)),
 	url(r'^ideas/', include('ideas.urls')),
 	url(r'^$', 'ideas.views.index', name='index'),
+    url(r'^about/$', TemplateView.as_view(template_name="ideas/about.html")),
+	url(r'^explore/$', TemplateView.as_view(template_name="ideas/explore.html")),
 	#url(r'^$', TemplateView.as_view(template_name='index2.html')),
 
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
