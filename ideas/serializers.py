@@ -7,9 +7,6 @@ class DropsSerializer(serializers.ModelSerializer):
 		model = Drops
 		fields = ('id', 'data', 'url', 'drop_type', 'user', 'date', 'parent_id', 'origin_id')
 
-class PaginatedDropsSerialzer(pagination.PaginationSerializer):
-	class Meta:
-		object_serializer_class = DropsSerializer
 
 
 class D3Serializer(serializers.ModelSerializer):

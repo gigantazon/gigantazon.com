@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from ideas.models import Drops, UserProfile, Comments, Watch
+from ideas.models import Drops, UserProfile, Comments, Watch, Category
 from ideas.forms import DropsForm, UserForm, UserProfileForm, CommentForm
 from django.core.paginator import Paginator,EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
@@ -104,6 +104,8 @@ def ideas(request):
 		kwargs['drop_type'] = request.POST.get('type', 'idea')
 		kwargs['url'] = request.POST.get('url', '')
 		kwargs['user'] = uid
+		cat = Category.objects.get(name=request.POST.get('category', ''))
+		kwargs['category'] = cat
 		parent = request.POST.get('parent', '')
 		origin = request.POST.get('origin', '')
 		if origin == " 0":

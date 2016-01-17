@@ -15,6 +15,14 @@ def gen_filename(size=16, chars=string.ascii_letters + string.digits):
 
 def gen_short(size=8, chars=string.ascii_letters + string.digits):
 	return ''.join(random.choice(chars) for _ in range(size))
+
+class Category(models.Model):
+	name = models.CharField(max_length=128, unique=True)
+	img = models.CharField(max_length=50,null=True,blank=True)
+	description = models.CharField(max_length=200, null=True, blank=True)
+
+	def __unicode__(self):
+		return self.name
 	
 class UserProfile(models.Model):
 	user = models.OneToOneField(User)
@@ -81,6 +89,7 @@ class Drops(models.Model):
 	url = models.URLField(max_length=1000,blank=True)
 	drop_type = models.CharField(max_length=15)
 	user = models.ForeignKey(User)
+	category = models.ForeignKey(Category)
 	date = models.DateTimeField(auto_now_add=True)
 	dueDate = models.DateTimeField(null=True,blank=True)
 	parent_id = models.ForeignKey('self',null=True,blank=True)
