@@ -20,6 +20,8 @@ class Category(models.Model):
 	name = models.CharField(max_length=128, unique=True)
 	img = models.CharField(max_length=50,null=True,blank=True)
 	description = models.CharField(max_length=200, null=True, blank=True)
+	color = models.CharField(max_length=8)
+	parent = models.ForeignKey('self',null=True,blank=True)
 
 	def __unicode__(self):
 		return self.name
@@ -115,6 +117,10 @@ class Drops(models.Model):
 	def children(self):
 		c = Drops.objects.filter(parent_id=self.id)
 		return c
+
+	def replies(self):
+		r = Drops.objects.filter(origin_id=self.id).count()
+		return r
 
 class Comments(models.Model):
 		idea = models.ForeignKey(Drops)
