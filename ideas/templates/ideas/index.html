@@ -1,0 +1,70 @@
+{% extends 'ideas/nav.html' %}
+{% block main %}
+{% load static %}
+
+<div class="uk-grid"  style="background-color: #ff7f2a; padding: 48px">
+  <div class="uk-width-medium-4-10 uk-push-1-10">
+    <article class="uk-article">
+      <h1 class="glow uk-article-title" style="color: #fff; font-size: 45px; font-weight: 200">Where good ideas come to life</h1>
+      <p class="uk-article-lead" style="font-size: 21px; ">Intuitive collaboration, conversation mapping, and a global community for public and private idea development. Publically shared ideas are always free!</p>
+      <p class="uk-article-lead" style="font-size: 21px; "> What's your big idea?</p>
+      <p class="uk-article-lead">Private plans start at $3/month</p>
+
+    </article>
+    </div>
+    <div class="uk-width-medium-2-10 uk-push-2-10">
+      <form class="uk-form" id="user_form" method="post" action="/ideas/register/" enctype="multipart/form-data">
+        <div class="uk-form-row">
+          {% csrf_token %}
+          <input type="text" class="form-control" id="id_username" name="username" placeholder="Choose a username">
+        </div>
+        <div class="uk-form-row">
+          <input type="text" class="form-control" id="id_email" name="email" placeholder="Enter your email">
+        </div>
+        <div class="uk-form-row">
+          <input type="password" class="form-control" id="id_password" name="password" placeholder="Create a password">
+          <p class="help-block" style="font-size: .7em">*Please use strong passwords</p>
+        </div>
+        <button type="submit" class="uk-button uk-button-success" >Register</button>
+      </form>
+    </div>
+</div>  
+
+<div class="uk-container uk-container-center uk-margin-top">
+  <div class="uk-grid">
+   <div class="uk-width-medium-1-1">
+     <button class="uk-button uk-button-vid" data-uk-modal="{target:'#gzvid'}">Watch the video</button>
+     <h2>A few reasons you'll love Gigantazon</h2>
+   </div>
+  </div>
+  <div class="uk-grid">
+   <div class="uk-width-medium-1-4 uk-width-small-1-1">
+     <h3>Focus on What's Said</h3>
+     <p>Being content-centric means that the post is the star. Not when it was posted or who posted it, but what is posted. In fact, you can contribute at any time, and won’t get buried.</p>
+    </div>
+    <div class="uk-width-medium-1-4 uk-width-small-1-1">
+     <h3>Socially-Minded Community</h3>
+     <p>All of our users come from various backgrounds, with different experiences, insights, educations, and expertise. They all come here to make ideas actionable - to help you make your idea happen.</p>
+    </div>
+    <div class="uk-width-medium-1-4 uk-width-small-1-1">
+     <h3>Map Conversations</h3>
+     <p>Seeing online interactions develop and grow provides much information you cannot normally gather. Each conversation has its own design - and you can contribute whenever you want!</p>
+    </div>
+    <div class="uk-width-medium-1-4 uk-width-small-1-1">
+      <h3>Analytics (Coming Soon!)</h3>
+      <p>They say a picture is worth 1,000 words - we’re ramping up to gather much more information than that from these maps. They are more compelling than the typical interaction, and informative too.</p>
+    </div>
+  </div>
+
+</div>
+<div id="gzvid" class="uk-modal uk-open">
+  <div class="uk-modal-dialog uk-modal-dialog-lightbox uk-slidenav-position" style="margin-left: auto: margin-right: auto; width: 1108px; height: 623px; top: 0px">
+    <a href="#" class="uk-modal-close uk-close uk-close-alt"></a>
+    <div class="uk-lightbox-content">
+      <iframe src="//www.youtube.com/embed/1LN5crzo0aw" width="1280" height="720" style="max-width: 100%; height: 623px;"></iframe>
+    </div>
+    <div class="uk-modal-spinner uk-hidden"></div>
+    <div class="uk-modal-caption">Caption</div>
+  </div>
+</div>
+{% endblock %}

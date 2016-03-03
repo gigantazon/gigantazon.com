@@ -1,0 +1,51 @@
+{% extends "ideas/base.html" %}
+{% block head %}
+<script>
+$(document).ready(function() {
+  $('input[name=website]').val("http://");
+})
+</script>
+{% endblock %}
+{% block main %}
+<div class="row" style="min-height: 500px">
+ <div class="col-md-5 col-md-offset-1">
+  {% if registered %}
+    <h3><strong>Thank you for registering with Gigantazon.com</strong></h3>
+    <a href="/ideas/">Go to the ideas</a>
+  {% else %}
+
+  <form id="user_form" method="post" action="/ideas/register/" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% for field in user_form %}
+      {{ field.errors }}
+      <div class="row">
+        <div class="md-col-2">
+          {{ field.name.capitalize }}
+        </div>
+        <div class="md-col-4">
+          {{ field }}
+        </div>
+      </div>
+    {% endfor %}
+
+    {% for field in profile_form %}
+      {{ field.errors }}
+      <div class="row">
+        <div class="md-col-2">
+          {{ field.name.capitalize }}
+        </div>
+        <div class="md-col-4">
+          {{ field }}
+        </div>
+      </div>
+    {% endfor %}
+    <div class="row">
+    <div class="md-col-4">
+      <div class="small primary pretty button"><input type="submit" name="submit" value="Register"></a></div>
+    </div>
+    </div>
+  </form>
+  {% endif %}
+ </div>
+</div>
+{% endblock %}

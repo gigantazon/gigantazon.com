@@ -113,3 +113,19 @@ p.top {
     5px 4px 1px #999, 4px 5px 1px #bababa,
     6px 5px 1px #999;
 }
+
+
+.uk-button-vid {
+  background-color: #ff7f2a;
+  color: #ffffff;
+}
+.uk-button-vid:hover,
+.uk-button-vid:focus {
+  background-color: #ef7727;
+  color: #ffffff;
+}
+.uk-button-vid:active,
+.uk-button-vid.uk-active {
+  background-color: #ff7112;
+  color: #ffffff;
+}
