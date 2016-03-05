@@ -41,6 +41,7 @@ class JSONResponse(HttpResponse):
 def ideas(request):
 	context = RequestContext(request)
 	drop_parents = Drops.objects.filter(parent_id__isnull=True).order_by('-date')
+	categories = Category.objects.all()
 	paginator = Paginator(drop_parents, 20)
 	page = request.GET.get('page')
 	latestpage = request.GET.get('latest')
@@ -55,7 +56,7 @@ def ideas(request):
 		paginator = paginator.page(paginator.num_pages)
 
 	latest = Drops.objects.order_by('-date')[:100]
-	latest_page = Paginator(latest, 20)
+	latest_page = Paginator(latest, 10)
 	try:
 		latest_page = latest_page.page(latestpage)
 	except PageNotAnInteger:
@@ -66,7 +67,7 @@ def ideas(request):
 	user_form = UserForm()
 	profile_form = UserProfileForm()
 
-	context_dict = {'drop_parents': paginator, 'latest': latest_page, 'user_form': user_form, 'profile_form': profile_form }
+	context_dict = {'drop_parents': paginator, 'latest': latest_page, 'user_form': user_form, 'profile_form': profile_form, 'categories': categories}
 
 	uid = request.user
 	try:
@@ -104,8 +105,9 @@ def ideas(request):
 		kwargs['drop_type'] = request.POST.get('type', 'idea')
 		kwargs['url'] = request.POST.get('url', '')
 		kwargs['user'] = uid
-		cat = Category.objects.get(name=request.POST.get('category', ''))
-		kwargs['category'] = cat
+		if request.POST.get('category'):
+		    cat = Category.objects.get(id=request.POST.get('category', ''))
+		    kwargs['category'] = cat
 		parent = request.POST.get('parent', '')
 		origin = request.POST.get('origin', '')
 		if origin == " 0":

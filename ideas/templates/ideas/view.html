@@ -32,21 +32,6 @@ $(document).ready(function(){
     })
 
   })
-  $('a[rel=tooltip]').tooltip();
-  $('a[rel=tooltip]').mouseover(function() {
-    mapid = $(this).attr('id')
-          
-    colorid = $('circle#'+mapid).css('fill')
-    r = parseInt($('circle#'+mapid).attr('r')) + 5
-    $('circle#'+mapid).css("fill", "#f66200").attr('r', r)
-    $('text[id='+mapid+']').css('font-size', '20px').attr('fill', 'black')
-  })
-  .mouseout(function() {
-    r = parseInt($('circle#'+mapid).attr('r')) - 5
-    $('circle#'+mapid).css("fill", colorid)
-    r = $('circle#'+mapid).attr('r', r)
-    $('text[id='+mapid+']').css('font-size', '10px').attr('fill', '#5e5e5e')
-  })
 
  
   $('select#type').on('change', function() {
@@ -104,9 +89,9 @@ $(document).ready(function(){
       success: function(data)
       {
         if ( data === 'OK' ) {
-          $("#watch").attr("class", "btn btn-success").html("Watching")
+          $("#watch").attr("class", "uk-button uk-button-success").html("Watching")
         } else {
-          $("#watch").attr("class", "btn btn-danger").html("Failed")
+          $("#watch").attr("class", "uk-button uk-button-danger").html("Failed")
         }
       }
     })
@@ -120,14 +105,14 @@ $(document).ready(function(){
       success: function(data)
       {
         if ( data === 'OK' ) {
-          $("#unwatch").attr("class", "btn btn-success").html("Unwatched")
+          $("#unwatch").attr("class", "uk-button uk-button-success").html("Unwatched")
         } else {
-          $("unwatch").attr("class", "btn btn-danger").html("Failed")
+          $("unwatch").attr("class", "uk-button uk-button-danger").html("Failed")
         }
       }
     })
   })
- $('a').tooltip();
+
  });   
 
 function trimText(text) {
@@ -144,7 +129,7 @@ function trimText(text) {
 <div class="uk-container uk-container-center">
 <div class="uk-grid">
 
- <div class="uk-width-1-1" id="svg" style="min-height: 250px; background: #fff; ">
+ <div class="uk-width-1-1" id="svg" style="min-height: 250px; background: #fff; border: 1px solid #e1e1e1; margin-top: 20px">
  </div>
  {% if origin %} 
   <div class="uk-width-1-1">
@@ -164,7 +149,7 @@ function trimText(text) {
     <li>Replies: {{ children }}</li>
    </ul>
    <button type="button" class="uk-button" data-uk-modal="{target: '#ideaModal'}">Add Reply</button> 
-    {% if user.is_authenticated %}{% if watching == True %}<button type="button" id="unwatch" class="uk-button uk-button-danger">UnWatch</button>{% else %}<button type="button" id="watch" class="uk-button">Watch</button>{% endif %}{% endif %}
+    {% if user.is_authenticated %}{% if watching == True %}<button type="button" id="unwatch" class="uk-button uk-button-danger">UnWatch</button>{% else %}<button type="button" id="watch" class="uk-button uk-button-success">Watch</button>{% endif %}{% endif %}
    <a href="#reportModal" data-uk-modal >Report</a>
   </div>
 

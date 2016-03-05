@@ -1,34 +1,33 @@
-{% extends "ideas/base.html" %}
+{% extends "ideas/nav.html" %}
 {% load static %}
 
 {% block main %}
-<div class="row">
-  <div class="col-md-4 col-md-offset-1">
+<div class="uk-container uk-container-center uk-margin-top">
+  <div class="uk-width-1-1">
     <img class="img-responsive" src="/media/{{ profile.picture }}">
     <br />
     <h6>Upload Picture</h6>
-    <form id="image_upload_form" method="post" action="/ideas/profile/" enctype="multipart/form-data">
+    <form class="uk-form" id="image_upload_form" method="post" action="/ideas/profile/" enctype="multipart/form-data">
       {% csrf_token %}
-      <div class="form-group">
-       <div class="four columns">
-        <input id="id_picture" name="picture" type="file" />
+      <fieldset>
+       <div class="uk-form-file">
+        <button class="uk-button">Select</button><input id="id_picture" name="picture" type="file">       
        </div>
-      </div>
-      <button type="submit" class="btn btn-info" style="margin-bottom: 10px">Submit</button>
+      </fieldset>
+      <br />
+      <button type="submit" class="uk-button" style="margin-bottom: 10px">Submit</button>
     </form>  
   </div>
 
-  <div class="col-md-4" style="margin-top: 80px">
-    <div class="row">
+  <div class="uk-width-1-1">
       <div class="col-md-12">
         <p>Username: {{ user.username }}<br />
         Member since: {{ user.date_joined|date:"M d Y" }}<br />
         {% if profile.website %}<p>Website: {{ profile.website }}<p>{% endif %}
       </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        <ul class="list-unstyled">
+  </div>
+  <div class="uk-width-1-1">
+        <ul class="uk-list">
         {% for drop in drops %}
           {% if drop.drop_type == 'idea' %}
             <li class="idea">

@@ -28,12 +28,11 @@
 <nav class="uk-navbar">
   <a class="uk-navbar-brand" href="/"><img alt="Gigantazon" src="{% static "img/gzlightbulb.png"%}" width="30px"></a>
   <ul class="uk-navbar-nav">
-    <li><a href="/about">About</a></li>
     <li><a href="/ideas">Explore</a></li>
-    <li><a href="#">Features</a></li>
-    <li><a href="/pricing">Pricing</a></li>
+    <!--<li><a href="/pricing">Pricing</a></li>-->
     {% if user.is_authenticated %}
     <li><a href="/ideas/logout/">Logout</a></li>
+    <li><a href="/ideas/profile/">Profile</a></li>
     {% else %}
     <li><a href="/ideas/login/">Login</a></li>
     {% endif %}

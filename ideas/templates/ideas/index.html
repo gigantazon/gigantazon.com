@@ -3,7 +3,8 @@
 {% load static %}
 
 <div class="uk-grid"  style="background-color: #ff7f2a; padding: 48px">
-  <div class="uk-width-medium-4-10 uk-push-1-10">
+  <div class="uk-width-medium-2-10"><img src="{% static "img/gigantazon-hero.png" %}" ></div>
+  <div class="uk-width-medium-4-10">
     <article class="uk-article">
       <h1 class="glow uk-article-title" style="color: #fff; font-size: 45px; font-weight: 200">Where good ideas come to life</h1>
       <p class="uk-article-lead" style="font-size: 21px; ">Intuitive collaboration, conversation mapping, and a global community for public and private idea development. Publically shared ideas are always free!</p>
@@ -11,8 +12,8 @@
       <p class="uk-article-lead">Private plans start at $3/month</p>
 
     </article>
-    </div>
-    <div class="uk-width-medium-2-10 uk-push-2-10">
+  </div>
+  <div class="uk-width-medium-2-10 uk-push-1-10">
       <form class="uk-form" id="user_form" method="post" action="/ideas/register/" enctype="multipart/form-data">
         <div class="uk-form-row">
           {% csrf_token %}
@@ -27,7 +28,7 @@
         </div>
         <button type="submit" class="uk-button uk-button-success" >Register</button>
       </form>
-    </div>
+  </div>
 </div>  
 
 <div class="uk-container uk-container-center uk-margin-top">
@@ -64,7 +65,7 @@
       <iframe src="//www.youtube.com/embed/1LN5crzo0aw" width="1280" height="720" style="max-width: 100%; height: 623px;"></iframe>
     </div>
     <div class="uk-modal-spinner uk-hidden"></div>
-    <div class="uk-modal-caption">Caption</div>
+    <div class="uk-modal-caption">What's the big idea?</div>
   </div>
 </div>
 {% endblock %}

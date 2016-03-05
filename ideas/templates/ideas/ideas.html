@@ -37,6 +37,17 @@ $("li.top-ideas").each(function() {
  	<h3>Top Ideas</h3>
  </div>
 </div>
+<div class="uk-container uk-container-center">
+  <div class="uk-grid-1-1">
+{% if drop_parents.has_previous %} 
+  <a href="?page={{ drop_parents.previous_page_number }}"><button class="uk-button uk-button-mini uk-button-primary">Prev</button></a>
+{% endif %}
+{% if drop_parents.has_next %}
+  <a href="?page={{ drop_parents.next_page_number }}"><button class="uk-button uk-button-mini uk-button-primary" >Next</button></a>
+{% endif %}
+  </div>
+</div>
+
 
 <div class="uk-container uk-container-center">
   <div class="uk-grid-small-1-2 uk-grid-width-medium-1-3" data-uk-grid="{gutter: 20}">
@@ -51,16 +62,98 @@ $("li.top-ideas").each(function() {
  </div>
 </div>
 
-{% if drop_parents.has_previous %} 
-  <a href="?page={{ drop_parents.previous_page_number }}"><span class="label label-info">Prev</span></a>
+
+
+{% if user.is_authenticated %}
+<div class="uk-modal" id="ideaModal">
+  <div class="uk-modal-dialog">
+     <a class="uk-modal-close uk-close"></a>
+      <div class="uk-modal-header">
+        <h4 class="modal-title" id="ideaModalLabel">Add New Idea</h4>
+      </div>
+      <div class="modal-body">
+        <form class="uk-form" id="add_idea" method="post" action="/ideas/">
+          {% csrf_token %}
+          <fieldset>
+            <select name="category">
+              {%for category in categories %}
+                  <option value="{{category.id}}">{{ category.name }}</option>
+              {% endfor %}
+            </select>
+            <textarea maxlength="250" onkeyup="countChar(this)" class="form-control" rows="3" name="data" id="textIdea" placeholder="Add your idea" style="max-width: 80%; width: 80%"> </textarea><div id="charNum"></div>
+
+          </div>
+          <button type="submit" class="uk-button">Submit</button>
+        </form>
+      </div>
+       
+      </div>
+    </div>
+  </div>
+</div>
+{% else %}
+
+<div class="uk-modal" id="ideaModal">
+  <div class="uk-modal-dialog">
+    <a class="uk-modal-close uk-close"></a>
+    <div class="uk-modal-header">
+      <h4>Please Register or <a href="/ideas/login">login</a></h4>
+    </div>
+
+         <form id="user_form" method="post" action="/ideas/register/" enctype="multipart/form-data">
+          <input type='hidden' name='csrfmiddlewaretoken' value='nC3USuZt0XLU0ZycwsN2KaEovG6uPftE' />
+           
+              
+              <div class="form-group">
+               <div class="md-col-2">
+                Username
+               </div>
+               <div class="md-col-4">
+                <input id="id_username" maxlength="30" name="username" type="text" />
+               </div>
+              </div>
+           
+              
+              <div class="form-group">
+               <div class="md-col-2">
+                Email
+               </div>
+               <div class="md-col-4">
+                <input id="id_email" maxlength="254" name="email" type="email" />
+               </div>
+              </div>
+           
+              
+              <div class="form-group">
+               <div class="md-col-2">
+                Password
+               </div>
+               <div class="md-col-4">
+                <input id="id_password" name="password" type="password" />
+               </div>
+              </div>
+           
+
+           
+            
+            <div class="form-group">
+             <div class="md-col-2">
+              Website
+             </div>
+             <div class="md-col-4">
+              <input id="id_website" maxlength="200" name="website" type="url" />
+             </div>
+            </div>
+           
+            <div class="form-group">
+             <div class="md-col-4">
+              <div class="small primary pretty button"><input type="submit" name="submit" value="Register"></a></div>
+             </div>
+            </div>
+         </form>
+  </div>
+</div>
 {% endif %}
-{% if drop_parents.has_next %}
-  <a href="?page={{ drop_parents.next_page_number }}"><span class="label label-info">Next<span></a>
-{% endif %}
-
-
-
-
 <script>
   function countChar(val) {
       var len = val.value.length;
