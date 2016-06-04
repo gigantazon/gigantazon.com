@@ -95,7 +95,10 @@ def ideas(request):
 	if request.method == 'POST':
 		kwargs = { }
 		uid = request.user
-		kwargs['user'] = User.objects.get(username=uid)
+		if uid.is_anonymous:
+			kwargs['user'] = User.objects.get(username='anon')
+		else:
+			kwargs['user'] = User.objects.get(username=uid)
 		kwargs['data'] = request.POST['data']
 		kwargs['short'] = gen_small()
 		if request.POST.get('action-date'):
@@ -104,7 +107,7 @@ def ideas(request):
 			kwargs['dueDate'] = d
 		kwargs['drop_type'] = request.POST.get('type', 'idea')
 		kwargs['url'] = request.POST.get('url', '')
-		kwargs['user'] = uid
+		
 		if request.POST.get('category'):
 		    cat = Category.objects.get(id=request.POST.get('category', ''))
 		    kwargs['category'] = cat

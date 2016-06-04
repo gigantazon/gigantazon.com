@@ -1,4 +1,4 @@
-{% extends "ideas/base.html" %}
+{% extends "ideas/nav.html" %}
 {% load static %}
 
 {% block head %}
@@ -30,24 +30,28 @@ $(document).ready(function() {
 
 {% endblock %}
 {% block main %}
-{% if user.is_anonymous %}
-{% if login_fail %}
-	<p class="warn">{{ login_fail }}</p>
-	<p><a href="/ideas/password/reset/">Reset password</a></p>
-{% endif %}
-<div class="row" style="min-height: 500px">
-<div class="col-md-8 col-md-offset-2">
-<form id="login_form" method="post" action="/ideas/login/">
-	{% csrf_token %}
-	<input type="hidden" name="next" value="">
-	<div class="row">
+<div class="uk-container uk-container-center">
+ <div class="uk-grid">
+  {% if user.is_anonymous %}
+   {% if login_fail %}
+	 <p class="warn">{{ login_fail }}</p>
+	 <p><a href="/ideas/password/reset/">Reset password</a></p>
+   {% endif %}
+    <div class="uk-width-1-1">
+     <form id="login_form" method="post" action="/ideas/login/">
+	  {% csrf_token %}
+	  <input type="hidden" name="next" value="">
+	  <div class="row">
 		<div class="two columns">Username: </div><div class="four columns"><input type="text" name="username" value="" size="20" /></div>
-	</div>
-	<div class="row">
+	  </div>
+	  <div class="row">
 		<div class="two columns">Password: </div><div class="four columns"><input type="password" name="password" value="" size="20" /></div>
-	</div>
-	<div class="small pretty primary btn"><input type="submit" value="Login" /></div>
-</form>
-</div></div>
-{% endif %}
+	  </div>
+	  <div class="small pretty primary btn"><input type="submit" value="Login" /></div>
+     </form>
+    </div>
+   {% endif %} 
+  </div>
+ </div>
+
 {% endblock %}

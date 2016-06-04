@@ -4,14 +4,7 @@
 {% block main %}
 <script>
 $(document).ready(function () {
-  var loc = document.URL.indexOf('mypage')
-  if (document.URL.indexOf('mypage') != -1 ) {
-    $('a[href=#mine]').tab('show') 
-  } else if (document.URL.indexOf('watchpage') != -1 ) {
-    $('a[href=#watch]').tab('show') 
-  } else {
-    $('a[href=#latest]').tab('show') 
-  }
+
 
 $("li.top-ideas").each(function() {
   var ideaid = $(this).attr("id");
@@ -34,7 +27,7 @@ $("li.top-ideas").each(function() {
 <div class="uk-container uk-container-center uk-margin-top">
  <div class="uk-width-medium-1-1">
   <button class="uk-button" data-uk-modal="{target: '#ideaModal'}" >Add Idea</button><br />
- 	<h3>Top Ideas</h3>
+ 	<h3>Top Ideas - {{anon}}</h3>
  </div>
 </div>
 <div class="uk-container uk-container-center">

@@ -201,7 +201,6 @@ function trimText(text) {
   <div class="uk-modal-dialog">
       <div class="modal-header">
         <a class="uk-modal-close uk-close"></a>
-      {% if user.is_authenticated %}
         <h4 class="modal-title" id="ideaModalLabel">Add New Idea</h4>
       </div>
       <div class="modal-body">
@@ -222,43 +221,6 @@ function trimText(text) {
           </div>
           <button type="submit" class="btn btn-default">Submit</button>
         </form>
-      {% else %}
-       <h4 class="modal-title" id="ideaModalLabel">Please Register or <a href="/ideas/login/">Login</a></h4>
-      </div>
-      <div class="modal-body">
-        <form id="user_form" method="post" action="/ideas/register/" enctype="multipart/form-data">
-          {% csrf_token %}
-           {% for field in user_form %}
-              {{ field.errors }}
-              <div class="form-group">
-               <div class="md-col-2">
-                {{ field.name.capitalize }}
-               </div>
-               <div class="md-col-4">
-                {{ field }}
-               </div>
-              </div>
-           {% endfor %}
-
-           {% for field in profile_form %}
-            {{ field.errors }}
-            <div class="form-group">
-             <div class="md-col-2">
-              {{ field.name.capitalize }}
-             </div>
-             <div class="md-col-4">
-              {{ field }}
-             </div>
-            </div>
-           {% endfor %}
-            <div class="form-group">
-             <div class="md-col-4">
-              <div class="small primary pretty button"><input type="submit" name="submit" value="Register"></a></div>
-             </div>
-            </div>
-         </form>
-       </div>
-      {% endif %}
       </div>
   </div>
 </div>
